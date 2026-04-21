@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>Blog & Articles | Boboreviews</title>
+  <meta name="description" content="Read the latest articles and AI tool reviews on Boboreviews.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .page-header {
+      text-align: center;
+      margin: 4rem 0 2rem;
+    }
+    .page-header h1 {
+      font-size: 2.5rem;
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container header-inner">
+      <a href="/" class="logo" style="display: flex; align-items: center;">
+        <img src="favicon.png" alt="Boboreviews Logo" style="height: 32px; margin-right: 8px; border-radius: 4px;">
+        BOBO<span>REVIEWS</span>
+      </a>
+      <div class="search-bar">
+        <input type="text" placeholder="Search for stores, deals or tools...">
+      </div>
+      <nav>
+        <a href="/" style="font-weight: 600; color: var(--primary);">← Back to Home</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <h1>Featured Articles & Reviews</h1>
+      <p style="color: var(--text-muted); margin-top: 1rem;">Stay updated with our latest insights, tips, and product reviews.</p>
+    </div>
+
+    <section id="blog">
+      <div class="blog-list" id="blog-container">
+        <!-- Dynamically populated -->
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom" style="margin-top: 2rem; text-align: center; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+        <p>&copy; 2026 Boboreviews. All original links and content preserved. Built with premium aesthetics.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module">
+    import siteData from './data.js';
+
+    // Populate Blog
+    const blogContainer = document.getElementById('blog-container');
+    siteData.blogPosts.forEach(post => {
+      const card = document.createElement('a');
+      card.href = post.link;
+      card.className = 'blog-card animate';
+      card.innerHTML = `
+        <h3 class="blog-title">${post.title}</h3>
+      `;
+      blogContainer.appendChild(card);
+    });
+  </script>
+</body>
+</html>

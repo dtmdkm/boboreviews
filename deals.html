@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>All Deals | Boboreviews</title>
+  <meta name="description" content="Discover all the latest coupons, deals, and discounts at Boboreviews.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .page-header {
+      text-align: center;
+      margin: 4rem 0 2rem;
+    }
+    .page-header h1 {
+      font-size: 2.5rem;
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container header-inner">
+      <a href="/" class="logo" style="display: flex; align-items: center;">
+        <img src="favicon.png" alt="Boboreviews Logo" style="height: 32px; margin-right: 8px; border-radius: 4px;">
+        BOBO<span>REVIEWS</span>
+      </a>
+      <div class="search-bar">
+        <input type="text" placeholder="Search for stores, deals or tools...">
+      </div>
+      <nav>
+        <a href="/" style="font-weight: 600; color: var(--primary);">← Back to Home</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <h1>All Available Deals</h1>
+      <p style="color: var(--text-muted); margin-top: 1rem;">Browse our curated list of the best discounts and premium tools.</p>
+    </div>
+
+    <section id="deals-of-today">
+      <div class="deals-grid" id="deals-container">
+        <!-- Dynamically populated -->
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom" style="margin-top: 2rem; text-align: center; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+        <p>&copy; 2026 Boboreviews. All original links and content preserved. Built with premium aesthetics.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module">
+    import siteData from './data.js';
+
+    // Populate Deals
+    const dealsContainer = document.getElementById('deals-container');
+    siteData.deals.forEach(deal => {
+      const card = document.createElement('div');
+      card.className = 'deal-card animate';
+      card.innerHTML = `
+        <a href="${deal.link}" style="display: contents;">
+          <img src="${deal.image}" alt="${deal.title}" class="deal-image" onerror="this.src='https://placehold.co/800x600/f8fafc/1e293b?text=Image+Not+Available'">
+        </a>
+        <div class="deal-content">
+          <a href="${deal.link}" style="color: inherit; text-decoration: none;">
+            <h3 class="deal-title">${deal.title}</h3>
+          </a>
+          <p class="deal-desc">${deal.description}</p>
+          <div class="price-container">
+            <span class="original-price">${deal.price}</span>
+            <span class="discount-price">${deal.discountPrice}</span>
+          </div>
+          <a href="${deal.link}" class="get-deal-btn">Get Deal</a>
+        </div>
+      `;
+      dealsContainer.appendChild(card);
+    });
+  </script>
+</body>
+</html>

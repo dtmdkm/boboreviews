@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>Boboreviews | Leading Coupons & Deals Marketplace</title>
+  <meta name="description" content="Discover the best coupons, deals, and AI tool reviews at Boboreviews. Save money on your favorite stores today.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <div class="container header-inner">
+      <a href="/" class="logo" style="display: flex; align-items: center;">
+        <img src="favicon.png" alt="Boboreviews Logo" style="height: 32px; margin-right: 8px; border-radius: 4px;">
+        BOBO<span>REVIEWS</span>
+      </a>
+      <div class="search-bar">
+        <input type="text" placeholder="Search for stores, deals or tools...">
+      </div>
+      <nav>
+        <!-- Nav items could go here if needed -->
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    
+    <section id="popular-stores">
+      <div class="section-title">
+        <h2>Popular Stores</h2>
+        <div class="slider-nav">
+          <button id="slide-left" class="nav-btn" aria-label="Previous">←</button>
+          <button id="slide-right" class="nav-btn" aria-label="Next">→</button>
+        </div>
+      </div>
+      <div class="slider-container">
+        <div class="stores-slider" id="stores-container">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </section>
+
+    <section id="deals-of-today">
+      <div class="section-title">
+        <h2>Deals Of Today</h2>
+        <a href="deals.html" style="color: var(--primary); font-weight: 600;">View All →</a>
+      </div>
+      <div class="deals-grid" id="deals-container">
+        <!-- Dynamically populated -->
+      </div>
+    </section>
+
+    <section id="categories">
+      <div class="section-title">
+        <h2>Categories</h2>
+      </div>
+      <div class="categories-grid" id="categories-container">
+        <!-- Dynamically populated -->
+      </div>
+    </section>
+
+    <section id="blog">
+      <div class="section-title">
+        <h2>Featured Articles</h2>
+        <a href="blog.html" style="color: var(--primary); font-weight: 600;">View Blog →</a>
+      </div>
+      <div class="blog-list" id="blog-container">
+        <!-- Dynamically populated -->
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col" id="footer-event-sales">
+          <h4>Event Sales</h4>
+          <ul id="event-sales-list"></ul>
+        </div>
+        <div class="footer-col" id="footer-resources">
+          <h4>Resources</h4>
+          <ul id="resources-list"></ul>
+        </div>
+        <div class="footer-col" id="footer-company">
+          <h4>Company</h4>
+          <ul id="company-list"></ul>
+        </div>
+        <div class="footer-col" id="footer-notices">
+          <h4>Notices</h4>
+          <ul id="notices-list"></ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Boboreviews. All original links and content preserved. Built with premium aesthetics.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module">
+    import siteData from './data.js';
+
+    // Populate Popular Stores
+    const storesContainer = document.getElementById('stores-container');
+    siteData.popularStores.forEach(store => {
+      const card = document.createElement('a');
+      card.href = store.link;
+      card.className = 'store-card';
+      
+      let imgSrc = store.image;
+      if (!imgSrc) {
+        // Generate a clean fallback logo using the store's initials if no image is provided
+        const initial = store.name.substring(0, 2).toUpperCase();
+        const bgColor = 'f8fafc';
+        const textColor = '1e293b';
+        imgSrc = `https://placehold.co/200x200/${bgColor}/${textColor}?text=${initial}`;
+      }
+      
+      card.innerHTML = `
+        <img src="${imgSrc}" alt="${store.name} Logo" class="store-logo" onerror="this.src='https://placehold.co/200x200/f8fafc/1e293b?text=N/A'">
+        <span class="store-name">${store.name}</span>
+      `;
+      storesContainer.appendChild(card);
+    });
+
+    // Slider Navigation Logic
+    const slideLeft = document.getElementById('slide-left');
+    const slideRight = document.getElementById('slide-right');
+    const scrollAmount = 300;
+
+    slideLeft.addEventListener('click', () => {
+      storesContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    });
+
+    slideRight.addEventListener('click', () => {
+      storesContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    });
+
+    // Populate Deals
+    const dealsContainer = document.getElementById('deals-container');
+    siteData.deals.forEach(deal => {
+      const card = document.createElement('div');
+      card.className = 'deal-card animate';
+      card.innerHTML = `
+        <a href="${deal.link}" style="display: contents;">
+          <img src="${deal.image}" alt="${deal.title}" class="deal-image" onerror="this.src='https://placehold.co/800x600/f8fafc/1e293b?text=Image+Not+Available'">
+        </a>
+        <div class="deal-content">
+          <a href="${deal.link}" style="color: inherit; text-decoration: none;">
+            <h3 class="deal-title" style="transition: color 0.3s ease;">${deal.title}</h3>
+          </a>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">${deal.description}</p>
+          <div class="deal-prices">
+            <span class="price-old">${deal.price}</span>
+            <span class="price-new">${deal.discountPrice}</span>
+          </div>
+          <a href="${deal.link}" class="btn-deal">Get Deal</a>
+        </div>
+      `;
+      dealsContainer.appendChild(card);
+    });
+
+    // Populate Categories
+    const categoriesContainer = document.getElementById('categories-container');
+    siteData.categories.forEach(cat => {
+      const btn = document.createElement('a');
+      btn.href = cat.link;
+      btn.className = 'category-btn';
+      btn.textContent = cat.name;
+      categoriesContainer.appendChild(btn);
+    });
+
+    // Populate Blog
+    const blogContainer = document.getElementById('blog-container');
+    siteData.blogPosts.forEach(post => {
+      const item = document.createElement('div');
+      item.className = 'blog-item animate';
+      item.innerHTML = `
+        <a href="${post.link}" class="blog-link">
+          <h4>${post.title}</h4>
+          <span>Read More →</span>
+        </a>
+      `;
+      blogContainer.appendChild(item);
+    });
+
+    // Populate Footer
+    const populateList = (id, items) => {
+      const list = document.getElementById(id);
+      items.forEach(item => {
+        const li = document.createElement('li');
+        li.innerHTML = `<a href="${item.link}">${item.name}</a>`;
+        list.appendChild(li);
+      });
+    };
+
+    populateList('event-sales-list', siteData.eventSales);
+    populateList('resources-list', siteData.footer.resources);
+    populateList('company-list', siteData.footer.company);
+    populateList('notices-list', siteData.footer.notices);
+  </script>
+</body>
+</html>
