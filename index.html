@@ -111,15 +111,13 @@
         const storesContainer = document.getElementById('stores-container');
         siteData.popularStores.forEach(store => {
           const card = document.createElement('a');
-          card.href = store.link;
+          card.href = `store.html?slug=${store.slug}`;
           card.className = 'store-card';
           
           let imgSrc = store.image;
           if (!imgSrc) {
             const initial = store.name.substring(0, 2).toUpperCase();
-            const bgColor = 'f8fafc';
-            const textColor = '1e293b';
-            imgSrc = `https://placehold.co/200x200/${bgColor}/${textColor}?text=${initial}`;
+            imgSrc = `https://placehold.co/200x200/f8fafc/1e293b?text=${initial}`;
           }
           
           card.innerHTML = `
@@ -211,7 +209,7 @@
         }
 
       } catch (error) {
-        console.error("Lỗi khi tải dữ liệu từ Backend:", error);
+        console.error("Error loading data:", error);
       }
     }
 
