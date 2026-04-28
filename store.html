@@ -7,44 +7,6 @@
   <title>Coupons & Promo Codes | Boboreviews</title>
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="stylesheet" href="style.css">
-  <style>
-    :root {
-        --primary-green: #1a4d2e;
-        --secondary-green: #4f6f52;
-        --orange: #ff9f29;
-    }
-    .store-layout { display: grid; grid-template-columns: 300px 1fr; gap: 30px; margin-top: 40px; }
-    .sidebar-card { background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eee; }
-    .store-logo-large { width: 150px; height: 150px; object-fit: contain; margin-bottom: 20px; border-radius: 10px; }
-    .stars { color: #facc15; font-size: 1.2rem; margin: 10px 0; }
-    .btn-alert { width: 100%; padding: 12px; border: 1px solid var(--primary-green); color: var(--primary-green); background: white; border-radius: 6px; font-weight: 700; cursor: pointer; margin-top: 20px; transition: 0.3s; }
-    .btn-alert:hover { background: var(--primary-green); color: white; }
-    
-    .stats-box { margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; text-align: left; }
-    .stat-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; color: #666; }
-    
-    .promo-header h1 { font-size: 1.8rem; color: #333; margin-bottom: 10px; }
-    .filter-tabs { display: flex; gap: 10px; margin: 25px 0; }
-    .tab { padding: 8px 20px; border-radius: 6px; font-weight: 700; font-size: 0.9rem; cursor: pointer; background: #f8fafc; color: #666; border: 1px solid #eee; }
-    .tab.active { background: #22c55e; color: white; border-color: #22c55e; }
-    
-    .coupon-card { background: white; border-radius: 12px; padding: 25px; border: 1px solid #eee; margin-bottom: 20px; display: grid; grid-template-columns: 120px 1fr 180px; gap: 20px; align-items: center; position: relative; }
-    .save-badge { text-align: center; color: #22c55e; }
-    .save-badge .amount { font-size: 1.8rem; font-weight: 900; display: block; }
-    .save-badge .label { font-size: 0.9rem; font-weight: 700; }
-    
-    .coupon-info h3 { font-size: 1.2rem; margin-bottom: 8px; color: #1e293b; }
-    .coupon-info p { font-size: 0.9rem; color: #64748b; line-height: 1.5; }
-    .verified-tag { color: #22c55e; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: block; }
-    
-    .coupon-action { text-align: right; }
-    .btn-get { background: #22c55e; color: white; padding: 12px 30px; border-radius: 6px; text-decoration: none; font-weight: 700; display: inline-block; transition: 0.3s; }
-    .btn-get:hover { background: #16a34a; transform: translateY(-2px); }
-    
-    .about-section { margin-top: 60px; padding: 40px; background: white; border-radius: 12px; border: 1px solid #eee; }
-    .about-section h2 { margin-bottom: 20px; }
-    .content-body { color: #475569; line-height: 1.8; }
-  </style>
 </head>
 <body>
 
@@ -102,10 +64,10 @@
         </div>
 
         <div class="filter-tabs">
-          <div class="tab active">All(0)</div>
-          <div class="tab">Verified(0)</div>
-          <div class="tab">Codes(0)</div>
-          <div class="tab">Deals(0)</div>
+          <div class="tab active" onclick="filterDeals('all')">All</div>
+          <div class="tab" onclick="filterDeals('verified')">Verified</div>
+          <div class="tab" onclick="filterDeals('code')">Codes</div>
+          <div class="tab" onclick="filterDeals('deal')">Deals</div>
         </div>
 
         <div id="coupons-list">
@@ -133,6 +95,8 @@
   </footer>
 
   <script>
+    let allDeals = [];
+
     async function loadStore() {
       const urlParams = new URLSearchParams(window.location.search);
       const slug = urlParams.get('slug');
@@ -151,47 +115,38 @@
           return;
         }
 
+        allDeals = data.deals || [];
+
         // Fill Sidebar
         document.getElementById('store-logo').src = data.image;
         document.getElementById('sidebar-name').textContent = data.name;
         document.getElementById('promo-title').textContent = `${data.name} Coupons and Promo Codes`;
         document.getElementById('vote-count').textContent = `${data.rating?.toFixed(1) || '5.0'} / ${data.totalVotes?.toLocaleString() || '1,250'} votes`;
         
-        const codes = (data.deals || []).filter(d => d.type === 'code');
-        const deals = (data.deals || []).filter(d => d.type === 'deal');
+        const codes = allDeals.filter(d => d.type === 'code');
+        const deals = allDeals.filter(d => d.type === 'deal');
         
-        document.getElementById('coupon-count-label').textContent = `${(data.deals || []).length} Coupons, ${(data.deals || []).filter(d => d.isVerified).length} Verified Coupons`;
+        document.getElementById('coupon-count-label').textContent = `${allDeals.length} Coupons, ${allDeals.filter(d => d.isVerified).length} Verified Coupons`;
         document.getElementById('codes-count').textContent = codes.length;
         document.getElementById('deals-count').textContent = deals.length;
         
         // Fill Review
         document.getElementById('store-review-body').innerHTML = data.content || `Welcome to ${data.name}. Stay tuned for the latest coupons and deals!`;
 
-        // Render Coupons
-        const list = document.getElementById('coupons-list');
-        (data.deals || []).forEach(deal => {
-          const card = document.createElement('div');
-          card.className = 'coupon-card';
-          
-          const discountMatch = (deal.discountPrice || '').match(/(\d+%|\d+\$)/);
-          const discountVal = discountMatch ? discountMatch[0] : 'SALE';
+        // How to Apply Section
+        const howTo = document.createElement('div');
+        howTo.className = 'how-to-apply';
+        howTo.innerHTML = `
+          <h3>How to apply ${data.name} coupon codes?</h3>
+          <ol>
+            <li><strong>Step 1:</strong> Find your ${data.name} Coupons, discount codes on this page and click "GET CODE" button to view the code, then click "Copy" and the coupons, discount codes will be copied to your phone's or computer's clipboard.</li>
+            <li><strong>Step 2:</strong> Go to ${data.name} then select all items you want to buy and add to shopping cart. When finished shopping, go to the ${data.name} checkout page.</li>
+            <li><strong>Step 3:</strong> During checkout, find the text "Promo Code" or "Discount Code" and paste your ${data.name} coupons, discount codes in step 1 to this box. Click "Apply" and your savings for ${data.name} will be applied.</li>
+          </ol>
+        `;
+        document.getElementById('store-review-body').parentElement.appendChild(howTo);
 
-          card.innerHTML = `
-            <div class="save-badge">
-              <span class="amount">${discountVal}</span>
-              <span class="label">OFF</span>
-            </div>
-            <div class="coupon-info">
-              ${deal.isVerified ? '<span class="verified-tag">Verified Deal</span>' : ''}
-              <h3>${deal.title}</h3>
-              <p>${deal.description || 'Get this amazing deal now!'}</p>
-            </div>
-            <div class="coupon-action">
-              <a href="${deal.link}" target="_blank" class="btn-get" onclick="trackClick('${deal.id}')">${deal.type === 'code' ? 'Get Code' : 'Get Deal'}</a>
-            </div>
-          `;
-          list.appendChild(card);
-        });
+        renderDeals(allDeals);
 
         // Show content
         document.getElementById('loading').style.display = 'none';
@@ -201,6 +156,44 @@
         console.error("Error loading store:", error);
         document.getElementById('loading').innerHTML = '<h2 style="color: #ef4444;">Connection Error. Please try again.</h2>';
       }
+    }
+
+    function renderDeals(dealsToRender) {
+      const list = document.getElementById('coupons-list');
+      list.innerHTML = '';
+      
+      dealsToRender.forEach(deal => {
+        const card = document.createElement('div');
+        card.className = 'coupon-card';
+        
+        const discountMatch = (deal.discountPrice || '').match(/(\d+%|\d+\$)/);
+        const discountVal = discountMatch ? discountMatch[0] : (deal.discountValue || 'SALE');
+
+        card.innerHTML = `
+          <div class="save-badge">
+            <span class="amount">${discountVal}</span>
+            <span class="label">OFF</span>
+          </div>
+          <div class="coupon-info">
+            ${deal.isVerified ? '<span class="verified-tag">Verified Deal</span>' : ''}
+            <h3>${deal.title}</h3>
+            <p>${deal.description || 'Get this amazing deal now!'}</p>
+          </div>
+          <div class="coupon-action">
+            <a href="${deal.link}" target="_blank" class="btn-get" onclick="trackClick('${deal.id}')">${deal.type === 'code' ? 'Get Code' : 'Get Deal'}</a>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function filterDeals(type) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+
+      if (type === 'all') renderDeals(allDeals);
+      else if (type === 'verified') renderDeals(allDeals.filter(d => d.isVerified));
+      else renderDeals(allDeals.filter(d => d.type === type));
     }
 
     async function trackClick(dealId) {
