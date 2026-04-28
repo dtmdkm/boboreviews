@@ -14,7 +14,7 @@
         --orange: #ff9f29;
     }
     .store-layout { display: grid; grid-template-columns: 300px 1fr; gap: 30px; margin-top: 40px; }
-    .sidebar-card { background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eee; position: sticky; top: 100px; }
+    .sidebar-card { background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eee; }
     .store-logo-large { width: 150px; height: 150px; object-fit: contain; margin-bottom: 20px; border-radius: 10px; }
     .stars { color: #facc15; font-size: 1.2rem; margin: 10px 0; }
     .btn-alert { width: 100%; padding: 12px; border: 1px solid var(--primary-green); color: var(--primary-green); background: white; border-radius: 6px; font-weight: 700; cursor: pointer; margin-top: 20px; transition: 0.3s; }
@@ -23,28 +23,27 @@
     .stats-box { margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; text-align: left; }
     .stat-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; color: #666; }
     
-    .promo-header h1 { font-size: 2rem; color: #333; margin-bottom: 10px; font-weight: 800; }
-    .filter-tabs { display: flex; gap: 10px; margin: 25px 0; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+    .promo-header h1 { font-size: 1.8rem; color: #333; margin-bottom: 10px; }
+    .filter-tabs { display: flex; gap: 10px; margin: 25px 0; }
     .tab { padding: 8px 20px; border-radius: 6px; font-weight: 700; font-size: 0.9rem; cursor: pointer; background: #f8fafc; color: #666; border: 1px solid #eee; }
     .tab.active { background: #22c55e; color: white; border-color: #22c55e; }
     
-    .coupon-card { background: white; border-radius: 12px; padding: 25px; border: 1px solid #eee; margin-bottom: 20px; display: grid; grid-template-columns: 120px 1fr 180px; gap: 20px; align-items: center; position: relative; transition: 0.3s; }
-    .coupon-card:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.08); transform: translateY(-2px); }
-    .save-badge { text-align: center; color: #22c55e; border: 2px dashed #22c55e; padding: 10px; border-radius: 8px; }
+    .coupon-card { background: white; border-radius: 12px; padding: 25px; border: 1px solid #eee; margin-bottom: 20px; display: grid; grid-template-columns: 120px 1fr 180px; gap: 20px; align-items: center; position: relative; }
+    .save-badge { text-align: center; color: #22c55e; }
     .save-badge .amount { font-size: 1.8rem; font-weight: 900; display: block; }
-    .save-badge .label { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; }
+    .save-badge .label { font-size: 0.9rem; font-weight: 700; }
     
-    .coupon-info h3 { font-size: 1.3rem; margin-bottom: 8px; color: #1e293b; font-weight: 700; }
-    .coupon-info p { font-size: 0.95rem; color: #64748b; line-height: 1.5; }
-    .verified-tag { color: #22c55e; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: flex; align-items: center; gap: 4px; }
+    .coupon-info h3 { font-size: 1.2rem; margin-bottom: 8px; color: #1e293b; }
+    .coupon-info p { font-size: 0.9rem; color: #64748b; line-height: 1.5; }
+    .verified-tag { color: #22c55e; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: block; }
     
     .coupon-action { text-align: right; }
-    .btn-get { background: #22c55e; color: white; padding: 12px 35px; border-radius: 8px; text-decoration: none; font-weight: 800; display: inline-block; transition: 0.3s; box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3); }
-    .btn-get:hover { background: #16a34a; transform: scale(1.05); }
+    .btn-get { background: #22c55e; color: white; padding: 12px 30px; border-radius: 6px; text-decoration: none; font-weight: 700; display: inline-block; transition: 0.3s; }
+    .btn-get:hover { background: #16a34a; transform: translateY(-2px); }
     
-    .info-section { margin-top: 40px; padding: 40px; background: white; border-radius: 12px; border: 1px solid #eee; }
-    .info-section h2 { margin-bottom: 20px; font-size: 1.5rem; color: #1e293b; border-left: 5px solid var(--orange); padding-left: 15px; }
-    .content-body { color: #475569; line-height: 1.8; font-size: 1.05rem; }
+    .about-section { margin-top: 60px; padding: 40px; background: white; border-radius: 12px; border: 1px solid #eee; }
+    .about-section h2 { margin-bottom: 20px; }
+    .content-body { color: #475569; line-height: 1.8; }
   </style>
 </head>
 <body>
@@ -52,14 +51,14 @@
   <header>
     <div class="container header-inner">
       <a href="/" class="logo" style="display: flex; align-items: center;">
-        <img src="favicon.png" alt="Logo" style="height: 32px; margin-right: 8px; border-radius: 4px;">
+        <img src="favicon.png" alt="Boboreviews Logo" style="height: 32px; margin-right: 8px; border-radius: 4px;">
         BOBO<span>REVIEWS</span>
       </a>
       <div class="search-bar">
         <input type="text" placeholder="Search for stores, deals or tools...">
       </div>
       <nav>
-        <a href="/" style="font-weight: 700; color: var(--primary-green);">← Back to Home</a>
+        <a href="/" style="font-weight: 600; color: var(--primary-green);">← Back to Home</a>
       </nav>
     </div>
   </header>
@@ -70,27 +69,27 @@
       <aside>
         <div class="sidebar-card">
           <img id="store-logo" src="" alt="" class="store-logo-large">
-          <h2 id="sidebar-name" style="font-size: 1.4rem; font-weight: 800; margin-bottom: 10px;"></h2>
+          <h2 id="sidebar-name" style="font-size: 1.2rem; margin-bottom: 5px;"></h2>
           <div class="stars">★★★★★</div>
-          <div style="font-size: 0.9rem; color: #64748b;" id="vote-count">5.0 / 1,250 votes</div>
+          <div style="font-size: 0.8rem; color: #999;" id="vote-count">5.0 / 1,721 votes</div>
           <button class="btn-alert">Get Coupon Alert</button>
-          
-          <div class="stats-box">
-            <div class="stat-row">
-              <span id="coupon-count-label">0 Coupons available</span>
-            </div>
-            <div class="stat-row">
-              <span>Promo Codes</span>
-              <b id="codes-count">0</b>
-            </div>
-            <div class="stat-row">
-              <span>Sales & Deals</span>
-              <b id="deals-count">0</b>
-            </div>
-            <div class="stat-row">
-              <span>Best Savings</span>
-              <b id="best-offer" style="color: #22c55e;">Up to 50%</b>
-            </div>
+        </div>
+        
+        <div class="stats-box">
+          <div class="stat-row">
+            <span id="coupon-count-label">0 Coupons, 0 Verified Coupons</span>
+          </div>
+          <div class="stat-row">
+            <span>Coupon Codes</span>
+            <b id="codes-count">0</b>
+          </div>
+          <div class="stat-row">
+            <span>Deals</span>
+            <b id="deals-count">0</b>
+          </div>
+          <div class="stat-row">
+            <span>Best Offer</span>
+            <b id="best-offer" style="color: #22c55e;">Save 0%</b>
           </div>
         </div>
       </aside>
@@ -99,41 +98,37 @@
       <section>
         <div class="promo-header">
           <h1 id="promo-title"> Coupons and Promo Codes</h1>
-          <p style="color: #64748b; font-size: 1rem; margin-top: 10px;">Save money today with verified discount codes and seasonal sales.</p>
+          <p style="color: #666; font-size: 0.9rem;">You have a chance to be the first who save money with this coupon! Go ahead and shop!</p>
         </div>
 
         <div class="filter-tabs">
-          <div class="tab active" id="tab-all">All</div>
-          <div class="tab" id="tab-codes">Codes</div>
-          <div class="tab" id="tab-deals">Deals</div>
+          <div class="tab active">All(0)</div>
+          <div class="tab">Verified(0)</div>
+          <div class="tab">Codes(0)</div>
+          <div class="tab">Deals(0)</div>
         </div>
 
         <div id="coupons-list">
           <!-- Coupons populated here -->
         </div>
 
-        <div class="info-section">
+        <div class="about-section">
           <h2>About store</h2>
-          <div id="store-review-body" class="content-body"></div>
-        </div>
-
-        <div class="info-section">
-          <h2>How to apply coupon codes</h2>
-          <div class="content-body" id="how-to-apply">
-            <!-- Dynamic how-to content -->
+          <div id="store-review-body" class="content-body">
+            <!-- Review content here -->
           </div>
         </div>
       </section>
     </div>
     
-    <div id="loading" style="text-align: center; padding: 150px 0;">
-      <div style="font-size: 1.5rem; color: var(--primary-green); font-weight: 700;">Loading latest offers...</div>
+    <div id="loading" style="text-align: center; padding: 100px;">
+      <h2>Loading coupons...</h2>
     </div>
   </main>
 
-  <footer style="margin-top: 100px; padding: 60px 0; border-top: 1px solid #eee; background: #fff;">
-    <div class="container" style="text-align: center; color: #64748b;">
-      <p style="font-weight: 600;">&copy; 2026 Boboreviews Marketplace. All Rights Reserved.</p>
+  <footer style="margin-top: 100px; padding: 40px 0; border-top: 1px solid #eee;">
+    <div class="container" style="text-align: center; color: #999; font-size: 0.9rem;">
+      <p>&copy; 2026 Boboreviews. All Rights Reserved.</p>
     </div>
   </footer>
 
@@ -152,38 +147,29 @@
         const data = await response.json();
 
         if (data.error) {
-          document.getElementById('loading').innerHTML = '<h2 style="color: #ef4444;">Store Not Found</h2>';
+          document.getElementById('loading').innerHTML = '<h2>Store not found</h2>';
           return;
         }
 
-        // Fill Data
-        document.title = `${data.name} Coupons & Promo Codes | Boboreviews`;
-        document.getElementById('store-logo').src = data.image || 'favicon.png';
+        // Fill Sidebar
+        document.getElementById('store-logo').src = data.image;
         document.getElementById('sidebar-name').textContent = data.name;
         document.getElementById('promo-title').textContent = `${data.name} Coupons and Promo Codes`;
+        document.getElementById('vote-count').textContent = `${data.rating?.toFixed(1) || '5.0'} / ${data.totalVotes?.toLocaleString() || '1,250'} votes`;
         
-        const codes = data.deals.filter(d => d.type === 'code');
-        const deals = data.deals.filter(d => d.type === 'deal');
+        const codes = (data.deals || []).filter(d => d.type === 'code');
+        const deals = (data.deals || []).filter(d => d.type === 'deal');
         
-        document.getElementById('coupon-count-label').textContent = `${data.deals.length} Coupons & Offers Available`;
+        document.getElementById('coupon-count-label').textContent = `${(data.deals || []).length} Coupons, ${(data.deals || []).filter(d => d.isVerified).length} Verified Coupons`;
         document.getElementById('codes-count').textContent = codes.length;
         document.getElementById('deals-count').textContent = deals.length;
         
-        // Content & Instructions
-        document.getElementById('store-review-body').innerHTML = data.content || `Welcome to ${data.name}. Find the best deals and savings here!`;
-        document.getElementById('how-to-apply').innerHTML = `
-          <p>Applying a coupon for <strong>${data.name}</strong> is simple:</p>
-          <ol style="margin-top: 15px; padding-left: 20px;">
-            <li>Browse the available codes and click <strong>"Get Code"</strong> to reveal it.</li>
-            <li>Copy the code and head over to the ${data.name} official website.</li>
-            <li>Add items to your cart and proceed to checkout.</li>
-            <li>Paste your code into the "Promo Code" box and hit apply to see your savings instantly!</li>
-          </ol>
-        `;
+        // Fill Review
+        document.getElementById('store-review-body').innerHTML = data.content || `Welcome to ${data.name}. Stay tuned for the latest coupons and deals!`;
 
         // Render Coupons
         const list = document.getElementById('coupons-list');
-        data.deals.forEach(deal => {
+        (data.deals || []).forEach(deal => {
           const card = document.createElement('div');
           card.className = 'coupon-card';
           
@@ -196,24 +182,32 @@
               <span class="label">OFF</span>
             </div>
             <div class="coupon-info">
-              <span class="verified-tag">🛡️ Verified & Working</span>
+              ${deal.isVerified ? '<span class="verified-tag">Verified Deal</span>' : ''}
               <h3>${deal.title}</h3>
-              <p>${deal.description || 'Exclusive offer for Boboreviews shoppers. Limited time only!'}</p>
+              <p>${deal.description || 'Get this amazing deal now!'}</p>
             </div>
             <div class="coupon-action">
-              <a href="${deal.link}" target="_blank" class="btn-get">${deal.type === 'code' ? 'Get Code' : 'Get Deal'}</a>
+              <a href="${deal.link}" target="_blank" class="btn-get" onclick="trackClick('${deal.id}')">${deal.type === 'code' ? 'Get Code' : 'Get Deal'}</a>
             </div>
           `;
           list.appendChild(card);
         });
 
-        // Toggle UI
+        // Show content
         document.getElementById('loading').style.display = 'none';
         document.getElementById('store-content').style.display = 'grid';
 
       } catch (error) {
-        console.error("Critical error:", error);
+        console.error("Error loading store:", error);
         document.getElementById('loading').innerHTML = '<h2 style="color: #ef4444;">Connection Error. Please try again.</h2>';
+      }
+    }
+
+    async function trackClick(dealId) {
+      try {
+        await fetch(`https://admin.boboreviews.com/api/deals/${dealId}/click`, { method: 'POST' });
+      } catch (e) {
+        console.error("Click tracking failed", e);
       }
     }
 
