@@ -104,10 +104,6 @@
     // Hàm khởi tạo lấy dữ liệu từ hệ thống Backend mới
     async function initSite() {
       try {
-        // LƯU Ý QUAN TRỌNG: 
-        // Hiện tại đang gọi đến localhost để bạn test trên máy.
-        // Khi đẩy Backend lên mạng thực tế (ví dụ: Render.com), 
-        // bạn cần SỬA LẠI ĐƯỜNG LINK NÀY thành link thật (vd: https://bobo-api.onrender.com/api/data)
         const response = await fetch('https://admin.boboreviews.com/api/data');
         const siteData = await response.json();
 
@@ -120,7 +116,6 @@
           
           let imgSrc = store.image;
           if (!imgSrc) {
-            // Generate a clean fallback logo using the store's initials if no image is provided
             const initial = store.name.substring(0, 2).toUpperCase();
             const bgColor = 'f8fafc';
             const textColor = '1e293b';
@@ -182,7 +177,6 @@
         });
 
         // Populate Blog
-        // Thêm kiểm tra phòng trường hợp chưa có dữ liệu blog
         if (siteData.blogPosts) {
           const blogContainer = document.getElementById('blog-container');
           siteData.blogPosts.forEach(post => {
@@ -221,7 +215,6 @@
       }
     }
 
-    // Khởi chạy
     initSite();
   </script>
 </body>
