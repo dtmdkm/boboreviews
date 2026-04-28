@@ -147,15 +147,8 @@
   <div id="coupon-modal" class="modal-overlay">
     <div class="modal-popup">
       <span class="modal-close" onclick="closeModal()">&times;</span>
-      <div class="modal-body">
-        <img id="modal-logo" src="" alt="Store Logo" class="modal-store-logo">
-        <h3 id="modal-title" class="modal-title">Get $3 off Site-wide</h3>
-        <p class="modal-instruction">Copy the code and go to <span id="modal-store-name" style="color: #22c55e; font-weight: 600;">Store</span></p>
-        <div class="code-box">
-          <div id="modal-code" class="code-text">3HANDS-HTQ1601</div>
-          <button class="copy-btn" onclick="copyCode()">Tap To Copy</button>
-        </div>
-        <a href="#" id="modal-go-link" target="_blank" class="modal-footer-link">More Store Coupons >></a>
+      <div class="modal-body" id="modal-dynamic-content">
+        <!-- Content filled by JS -->
       </div>
     </div>
   </div>
@@ -379,12 +372,35 @@
       const deal = allDeals.find(d => d.id === dealId);
       if (!deal) return;
 
-      document.getElementById('modal-logo').src = currentStore.image;
-      document.getElementById('modal-title').textContent = deal.title;
-      document.getElementById('modal-store-name').textContent = currentStore.name;
-      document.getElementById('modal-code').textContent = deal.code || 'NO CODE';
-      document.getElementById('modal-go-link').href = deal.link;
-      document.getElementById('modal-go-link').textContent = `More ${currentStore.name} Coupons >>`;
+      const modalContent = document.getElementById('modal-dynamic-content');
+      
+      if (deal.code) {
+        // COUPON UI (With Code)
+        modalContent.innerHTML = `
+          <img src="${currentStore.image}" alt="Logo" class="modal-store-logo">
+          <h3 class="modal-title">${deal.title}</h3>
+          <p class="modal-instruction">Copy the code and go to <span style="color: #22c55e; font-weight: 600;">${currentStore.name}</span></p>
+          <div class="code-box">
+            <div id="modal-code" class="code-text">${deal.code}</div>
+            <button class="copy-btn" onclick="copyCode()">Tap To Copy</button>
+          </div>
+          <a href="${deal.link}" target="_blank" class="modal-footer-link">More ${currentStore.name} Coupons >></a>
+        `;
+      } else {
+        // DEAL UI (No Code)
+        modalContent.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 20px; text-align: left; margin-bottom: 25px;">
+            <img src="${currentStore.image}" alt="Logo" style="width: 80px; height: 80px; object-fit: contain; border: 1px solid #eee; border-radius: 50%;">
+            <h3 style="font-size: 1.4rem; margin: 0; color: #1e293b;">${deal.title}</h3>
+          </div>
+          <div style="border-top: 1px solid #eee; padding-top: 20px;">
+            <p style="color: #64748b; font-size: 1.1rem; margin-bottom: 20px;">No code needed</p>
+            <a href="${deal.link}" target="_blank" style="display: block; width: 100%; background: #22c55e; color: white; padding: 15px; border-radius: 8px; font-weight: 700; text-decoration: none; font-size: 1.2rem; text-align: center;">Go to ${currentStore.name}</a>
+          </div>
+          <a href="${deal.link}" target="_blank" style="display: block; margin-top: 20px; color: #22c55e; font-weight: 600; text-decoration: none;">More ${currentStore.name} >></a>
+        `;
+      }
+
       document.getElementById('coupon-modal').style.display = 'flex';
     }
 
@@ -393,7 +409,10 @@
     }
 
     function copyCode() {
-      const code = document.getElementById('modal-code').textContent;
+      const codeElement = document.getElementById('modal-code');
+      if (!codeElement) return;
+      
+      const code = codeElement.textContent;
       navigator.clipboard.writeText(code).then(() => {
         const btn = document.querySelector('.copy-btn');
         const originalText = btn.textContent;
