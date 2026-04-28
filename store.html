@@ -197,6 +197,16 @@
         document.getElementById('store-logo').src = data.image;
         document.getElementById('sidebar-name').textContent = data.name;
         document.getElementById('promo-title').textContent = `${data.name} Coupons and Promo Codes`;
+        
+        // Add Short Description under title
+        const descP = document.createElement('p');
+        descP.style.color = '#475569';
+        descP.style.fontSize = '1rem';
+        descP.style.marginTop = '8px';
+        descP.style.fontStyle = 'italic';
+        descP.textContent = data.description || '';
+        document.querySelector('.promo-header').appendChild(descP);
+
         document.getElementById('vote-count').textContent = `${data.rating?.toFixed(1) || '5.0'} / ${data.totalVotes?.toLocaleString() || '1,250'} votes`;
         
         const codes = allDeals.filter(d => d.type === 'code');
