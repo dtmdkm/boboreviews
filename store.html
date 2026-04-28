@@ -3,11 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
   <title>Coupons & Promo Codes | Boboreviews</title>
+  <link rel="icon" type="image/png" href="favicon.png">
   <link rel="stylesheet" href="style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+        --primary-green: #1a4d2e;
+        --secondary-green: #4f6f52;
+        --orange: #ff9f29;
+    }
+    .store-layout { display: grid; grid-template-columns: 300px 1fr; gap: 30px; margin-top: 40px; }
+    .sidebar-card { background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eee; }
+    .store-logo-large { width: 150px; height: 150px; object-fit: contain; margin-bottom: 20px; border-radius: 10px; }
+    .stars { color: #facc15; font-size: 1.2rem; margin: 10px 0; }
+    .btn-alert { width: 100%; padding: 12px; border: 1px solid var(--primary-green); color: var(--primary-green); background: white; border-radius: 6px; font-weight: 700; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+    .btn-alert:hover { background: var(--primary-green); color: white; }
+    
+    .stats-box { margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; text-align: left; }
+    .stat-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; color: #666; }
+    
+    .promo-header h1 { font-size: 1.8rem; color: #333; margin-bottom: 10px; }
+    .filter-tabs { display: flex; gap: 10px; margin: 25px 0; }
+    .tab { padding: 8px 20px; border-radius: 6px; font-weight: 700; font-size: 0.9rem; cursor: pointer; background: #f8fafc; color: #666; border: 1px solid #eee; }
+    .tab.active { background: #22c55e; color: white; border-color: #22c55e; }
+    
+    .coupon-card { background: white; border-radius: 12px; padding: 25px; border: 1px solid #eee; margin-bottom: 20px; display: grid; grid-template-columns: 120px 1fr 180px; gap: 20px; align-items: center; position: relative; }
+    .save-badge { text-align: center; color: #22c55e; }
+    .save-badge .amount { font-size: 1.8rem; font-weight: 900; display: block; }
+    .save-badge .label { font-size: 0.9rem; font-weight: 700; }
+    
+    .coupon-info h3 { font-size: 1.2rem; margin-bottom: 8px; color: #1e293b; }
+    .coupon-info p { font-size: 0.9rem; color: #64748b; line-height: 1.5; }
+    .verified-tag { color: #22c55e; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: block; }
+    
+    .coupon-action { text-align: right; }
+    .btn-get { background: #22c55e; color: white; padding: 12px 30px; border-radius: 6px; text-decoration: none; font-weight: 700; display: inline-block; transition: 0.3s; }
+    .btn-get:hover { background: #16a34a; transform: translateY(-2px); }
+    
+    .about-section { margin-top: 60px; padding: 40px; background: white; border-radius: 12px; border: 1px solid #eee; }
+    .about-section h2 { margin-bottom: 20px; font-size: 1.5rem; color: #1e293b; }
+    .content-body { color: #475569; line-height: 1.8; margin-bottom: 40px; }
+    
+    /* New styles from coreluxreview */
+    .people-also-ask-container { margin-top: 40px; padding-top: 30px; border-top: 1px solid #eee; }
+    .people-also-ask-title { font-size: 1.4rem; color: #1e293b; margin-bottom: 20px; font-weight: 700; }
+    .people-also-ask-container table { width: 100%; border-collapse: collapse; margin-bottom: 30px; border: 1px solid #eee; }
+    .people-also-ask-container td { padding: 20px; color: #475569; line-height: 1.7; font-size: 0.95rem; }
+    .people-also-ask-container tr:nth-child(even) { background: #f8fafc; }
+    .people-also-ask-container strong { color: #1e293b; }
+  </style>
 </head>
 <body>
 
@@ -65,10 +110,10 @@
         </div>
 
         <div class="filter-tabs">
-          <div class="tab active" onclick="filterDeals('all')">All</div>
-          <div class="tab" onclick="filterDeals('verified')">Verified</div>
-          <div class="tab" onclick="filterDeals('code')">Codes</div>
-          <div class="tab" onclick="filterDeals('deal')">Deals</div>
+          <div class="tab active">All(0)</div>
+          <div class="tab">Verified(0)</div>
+          <div class="tab">Codes(0)</div>
+          <div class="tab">Deals(0)</div>
         </div>
 
         <div id="coupons-list">
@@ -138,6 +183,16 @@
         currentStore = data;
         allDeals = data.deals || [];
 
+        // Update Title and Meta Tags for SEO
+        document.title = data.seoTitle || `${data.name} Coupons & Promo Codes | Boboreviews`;
+        let metaDesc = document.querySelector('meta[name="description"]');
+        if (!metaDesc) {
+          metaDesc = document.createElement('meta');
+          metaDesc.name = "description";
+          document.head.appendChild(metaDesc);
+        }
+        metaDesc.content = data.seoDescription || `Get the best ${data.name} coupons and promo codes at Boboreviews. Save money today!`;
+
         // Fill Sidebar
         document.getElementById('store-logo').src = data.image;
         document.getElementById('sidebar-name').textContent = data.name;
@@ -151,22 +206,64 @@
         document.getElementById('codes-count').textContent = codes.length;
         document.getElementById('deals-count').textContent = deals.length;
         
-        // Fill Review
+        // Fill Review (About Store)
         document.getElementById('store-review-body').innerHTML = data.content || `Welcome to ${data.name}. Stay tuned for the latest coupons and deals!`;
 
-        // How to Apply Section
+        // Create Container for Auto Sections
+        const autoSections = document.createElement('div');
+        autoSections.className = 'auto-sections';
+
+        // 1. How to Apply Section (Exact Coreluxreview structure)
         const howTo = document.createElement('div');
-        howTo.className = 'how-to-apply';
+        howTo.className = 'people-also-ask-container';
         howTo.innerHTML = `
-          <h3>How to apply ${data.name} coupon codes?</h3>
-          <ol>
-            <li><strong>Step 1:</strong> Find your ${data.name} Coupons, discount codes on this page and click "GET CODE" button to view the code, then click "Copy" and the coupons, discount codes will be copied to your phone's or computer's clipboard.</li>
-            <li><strong>Step 2:</strong> Go to ${data.name} then select all items you want to buy and add to shopping cart. When finished shopping, go to the ${data.name} checkout page.</li>
-            <li><strong>Step 3:</strong> During checkout, find the text "Promo Code" or "Discount Code" and paste your ${data.name} coupons, discount codes in step 1 to this box. Click "Apply" and your savings for ${data.name} will be applied.</li>
-          </ol>
+          <h2 class="people-also-ask-title">How to apply ${data.name} coupon codes?</h2>
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <p><strong>How to apply ${data.name} coupon codes?</strong><br>
+                    <strong>Step 1</strong>: Find your ${data.name} Coupons, discount codes on this page or Boboreviews and click "GET CODE" button to view the code, then click "Copy" and the coupons, discount codes will be copied to your phone's or computer's clipboard.<br>
+                    <strong>Step 2</strong>: Go to ${data.name} then select all items you want to buy and add to shopping cart. When finished shopping, go to the ${data.name} checkout page.<br>
+                    <strong>Step 3</strong>: During checkout, find the text "Promo Code" or "Discount Code" and paste your ${data.name} coupons, discount codes in step 1 to this box. Click "Apply" and your savings for ${data.name} will be applied.
+                  </p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         `;
+        autoSections.appendChild(howTo);
+
+        // 2. Questions & Answers Section
+        const faqData = data.faqs && data.faqs.length > 0 ? data.faqs : [
+          { q: `Why should I visit Boboreviews for ${data.name} coupons?`, a: `Boboreviews collects the top discounts from ${data.name}, even at the last minute while updating continually to ensure consumer savings. Coupons, promo codes, gift cards and many more can also be found on the website.` },
+          { q: `Where to find ${data.name} promo codes?`, a: `Right on the website of ${data.name} or join Boboreviews for more options of ${data.name} promo codes.` },
+          { q: `Will all ${data.name} discounts automatically be applied at checkout?`, a: `No. It depends on each ${data.name} deal. Some require you to apply a code at discount field while some are applied automatically.` },
+          { q: `Are there any ${data.name} Gift Cards available?`, a: `If a ${data.name} Gift Card is available, it will be aggregated above. Let’s check!` },
+          { q: `Can you give me a guide for using ${data.name} coupon codes?`, a: `Follow the guide below to score ${data.name} coupon: - Copy the coupon code that fits your order. - Navigate to ${data.name} and add your favorite items into the cart. - Apply code at checkout and enjoy saving.` }
+        ];
+
+        const faqSection = document.createElement('div');
+        faqSection.className = 'people-also-ask-container';
+        let faqHtml = `<h2 class="people-also-ask-title">${data.name} Questions & Answers</h2><table><tbody>`;
+        
+        faqData.forEach(item => {
+          faqHtml += `
+            <tr>
+              <td>
+                <strong>Q: ${item.question || item.q}</strong><br>
+                A: ${item.answer || item.a}
+              </td>
+            </tr>
+          `;
+        });
+        
+        faqHtml += `</tbody></table>`;
+        faqSection.innerHTML = faqHtml;
+        autoSections.appendChild(faqSection);
+
         const aboutSection = document.querySelector('.about-section');
-        if (aboutSection) aboutSection.appendChild(howTo);
+        if (aboutSection) aboutSection.appendChild(autoSections);
 
         // Bind Get Coupon Alert button to the first deal
         const alertBtn = document.querySelector('.btn-alert');
@@ -237,10 +334,7 @@
       window.open(offerUrl, '_blank');
 
       // 2. Redirect CURRENT tab to Affiliate Link
-      // Use setTimeout to ensure window.open finishes first
-      setTimeout(() => {
-        window.location.href = deal.link;
-      }, 100);
+      window.location.href = deal.link;
 
       trackClick(dealId);
     }
