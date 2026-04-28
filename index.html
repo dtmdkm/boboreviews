@@ -126,10 +126,8 @@
           
           card.innerHTML = `
             <img src="${imgSrc}" alt="${store.name} Logo" class="store-logo" onerror="this.src='https://placehold.co/200x200/f8fafc/1e293b?text=N/A'">
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-              <span class="store-name" style="font-weight: 700;">${store.name}</span>
-              <span style="font-size: 11px; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.2;">${store.description || ''}</span>
-            </div>
+            <span class="store-name">${store.name}</span>
+            <p style="font-size: 12px; color: #64748b; margin-top: 8px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 34px;">${store.description || ''}</p>
           `;
           storesContainer.appendChild(card);
         });
