@@ -72,6 +72,15 @@
   </header>
 
   <main class="container">
+    <!-- Hero Banner Section -->
+    <div id="store-banner-container" style="width: 100%; height: 250px; background: #0f172a; border-radius: 16px; margin-top: 20px; overflow: hidden; display: none; position: relative;">
+      <img id="store-banner-img" src="" alt="Banner" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.6;">
+      <div style="position: absolute; bottom: 30px; left: 40px; color: white;">
+        <h1 id="banner-store-name" style="font-size: 2.5rem; margin: 0;"></h1>
+        <p id="banner-store-desc" style="opacity: 0.9; margin-top: 5px;"></p>
+      </div>
+    </div>
+
     <div class="store-layout" id="store-content" style="display: none;">
       <!-- Sidebar -->
       <aside>
@@ -110,10 +119,10 @@
         </div>
 
         <div class="filter-tabs">
-          <div class="tab active">All(0)</div>
-          <div class="tab">Verified(0)</div>
-          <div class="tab">Codes(0)</div>
-          <div class="tab">Deals(0)</div>
+          <div class="tab active" onclick="filterDeals('all')">All(0)</div>
+          <div class="tab" onclick="filterDeals('verified')">Verified(0)</div>
+          <div class="tab" onclick="filterDeals('code')">Codes(0)</div>
+          <div class="tab" onclick="filterDeals('deal')">Deals(0)</div>
         </div>
 
         <div id="coupons-list">
@@ -193,6 +202,14 @@
         }
         metaDesc.content = data.seoDescription || `Get the best ${data.name} coupons and promo codes at Boboreviews. Save money today!`;
 
+        // Fill Banner if exists
+        if (data.banner) {
+          document.getElementById('store-banner-img').src = data.banner;
+          document.getElementById('banner-store-name').textContent = data.name;
+          document.getElementById('banner-store-desc').textContent = data.description || '';
+          document.getElementById('store-banner-container').style.display = 'block';
+        }
+
         // Fill Sidebar
         document.getElementById('store-logo').src = data.image;
         document.getElementById('sidebar-name').textContent = data.name;
@@ -212,6 +229,15 @@
         const codes = allDeals.filter(d => d.type === 'code');
         const deals = allDeals.filter(d => d.type === 'deal');
         
+        // Update Tabs with counts
+        const tabsContainer = document.querySelector('.filter-tabs');
+        tabsContainer.innerHTML = `
+          <div class="tab active" onclick="filterDeals('all')">All(${allDeals.length})</div>
+          <div class="tab" onclick="filterDeals('verified')">Verified(${allDeals.filter(d => d.isVerified).length})</div>
+          <div class="tab" onclick="filterDeals('code')">Codes(${codes.length})</div>
+          <div class="tab" onclick="filterDeals('deal')">Deals(${deals.length})</div>
+        `;
+
         document.getElementById('coupon-count-label').textContent = `${allDeals.length} Coupons, ${allDeals.filter(d => d.isVerified).length} Verified Coupons`;
         document.getElementById('codes-count').textContent = codes.length;
         document.getElementById('deals-count').textContent = deals.length;
@@ -386,7 +412,8 @@
 
       if (type === 'all') renderDeals(allDeals);
       else if (type === 'verified') renderDeals(allDeals.filter(d => d.isVerified));
-      else renderDeals(allDeals.filter(d => d.type === type));
+      else if (type === 'code') renderDeals(allDeals.filter(d => d.type === 'code'));
+      else if (type === 'deal') renderDeals(allDeals.filter(d => d.type === 'deal'));
     }
 
     async function trackClick(dealId) {
