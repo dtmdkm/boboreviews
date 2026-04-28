@@ -20,7 +20,7 @@
         <input type="text" placeholder="Search for stores, deals or tools...">
       </div>
       <nav>
-        <a href="/" style="font-weight: 600; color: var(--primary-green);">← Back to Home</a>
+        <a href="/" style="font-weight: 600; color: #22c55e;">← Back to Home</a>
       </nav>
     </div>
   </header>
@@ -88,6 +88,24 @@
     </div>
   </main>
 
+  <!-- Coupon Modal -->
+  <div id="coupon-modal" class="modal-overlay">
+    <div class="modal-popup">
+      <div class="modal-header-bar"></div>
+      <span class="modal-close" onclick="closeModal()">&times;</span>
+      <div class="modal-body">
+        <img id="modal-logo" src="" alt="Store Logo" class="modal-store-logo">
+        <h3 id="modal-title" class="modal-title">Get Discount</h3>
+        <p class="modal-instruction">Copy the code and go to <span id="modal-store-name" style="color: #22c55e; font-weight: 600;">Store</span></p>
+        <div class="code-box">
+          <div id="modal-code" class="code-text">CODE</div>
+          <button class="copy-btn" onclick="copyCode()">Tap To Copy</button>
+        </div>
+        <a href="#" id="modal-go-link" target="_blank" class="modal-footer-link">More Coupons >></a>
+      </div>
+    </div>
+  </div>
+
   <footer style="margin-top: 100px; padding: 40px 0; border-top: 1px solid #eee;">
     <div class="container" style="text-align: center; color: #999; font-size: 0.9rem;">
       <p>&copy; 2026 Boboreviews. All Rights Reserved.</p>
@@ -96,6 +114,7 @@
 
   <script>
     let allDeals = [];
+    let currentStore = null;
 
     async function loadStore() {
       const urlParams = new URLSearchParams(window.location.search);
@@ -115,6 +134,7 @@
           return;
         }
 
+        currentStore = data;
         allDeals = data.deals || [];
 
         // Fill Sidebar
@@ -144,7 +164,8 @@
             <li><strong>Step 3:</strong> During checkout, find the text "Promo Code" or "Discount Code" and paste your ${data.name} coupons, discount codes in step 1 to this box. Click "Apply" and your savings for ${data.name} will be applied.</li>
           </ol>
         `;
-        document.getElementById('store-review-body').parentElement.appendChild(howTo);
+        const aboutSection = document.querySelector('.about-section');
+        aboutSection.appendChild(howTo);
 
         renderDeals(allDeals);
 
@@ -166,8 +187,7 @@
         const card = document.createElement('div');
         card.className = 'coupon-card';
         
-        const discountMatch = (deal.discountPrice || '').match(/(\d+%|\d+\$)/);
-        const discountVal = discountMatch ? discountMatch[0] : (deal.discountValue || 'SALE');
+        const discountVal = deal.discountValue || (deal.discountPrice ? deal.discountPrice : 'SALE');
 
         card.innerHTML = `
           <div class="save-badge">
@@ -180,16 +200,55 @@
             <p>${deal.description || 'Get this amazing deal now!'}</p>
           </div>
           <div class="coupon-action">
-            <a href="${deal.link}" target="_blank" class="btn-get" onclick="trackClick('${deal.id}')">${deal.type === 'code' ? 'Get Code' : 'Get Deal'}</a>
+            <a href="javascript:void(0)" class="btn-get" onclick="handleOpenDeal('${deal.id}')">${deal.type === 'code' ? 'Get Code' : 'Get Deal'}</a>
           </div>
         `;
         list.appendChild(card);
       });
     }
 
+    function handleOpenDeal(dealId) {
+      const deal = allDeals.find(d => d.id === dealId);
+      if (!deal) return;
+
+      // 1. Open link in new tab
+      window.open(deal.link, '_blank');
+
+      // 2. If it's a code, show modal
+      if (deal.type === 'code') {
+        document.getElementById('modal-logo').src = currentStore.image;
+        document.getElementById('modal-title').textContent = deal.title;
+        document.getElementById('modal-store-name').textContent = currentStore.name;
+        document.getElementById('modal-code').textContent = deal.code || 'NO CODE';
+        document.getElementById('modal-go-link').href = deal.link;
+        document.getElementById('modal-go-link').textContent = `More ${currentStore.name} Coupons >>`;
+        document.getElementById('coupon-modal').style.display = 'flex';
+      }
+
+      trackClick(dealId);
+    }
+
+    function closeModal() {
+      document.getElementById('coupon-modal').style.display = 'none';
+    }
+
+    function copyCode() {
+      const code = document.getElementById('modal-code').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        const originalText = btn.textContent;
+        btn.textContent = 'COPIED!';
+        btn.style.background = '#166534';
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.background = '#22c55e';
+        }, 2000);
+      });
+    }
+
     function filterDeals(type) {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      event.target.classList.add('active');
+      if (event) event.target.classList.add('active');
 
       if (type === 'all') renderDeals(allDeals);
       else if (type === 'verified') renderDeals(allDeals.filter(d => d.isVerified));
