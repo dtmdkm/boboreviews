@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="referrer" content="no-referrer">
   <title>Coupons & Promo Codes | Boboreviews</title>
-  <link rel="icon" type="image/png" href="favicon.png">
   <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -20,7 +21,7 @@
         <input type="text" placeholder="Search for stores, deals or tools...">
       </div>
       <nav>
-        <a href="/" style="font-weight: 600; color: #22c55e;">← Back to Home</a>
+        <a href="/" style="font-weight: 600; color: var(--primary-green);">← Back to Home</a>
       </nav>
     </div>
   </header>
@@ -91,17 +92,16 @@
   <!-- Coupon Modal -->
   <div id="coupon-modal" class="modal-overlay">
     <div class="modal-popup">
-      <div class="modal-header-bar"></div>
       <span class="modal-close" onclick="closeModal()">&times;</span>
       <div class="modal-body">
         <img id="modal-logo" src="" alt="Store Logo" class="modal-store-logo">
-        <h3 id="modal-title" class="modal-title">Get Discount</h3>
+        <h3 id="modal-title" class="modal-title">Get $3 off Site-wide</h3>
         <p class="modal-instruction">Copy the code and go to <span id="modal-store-name" style="color: #22c55e; font-weight: 600;">Store</span></p>
         <div class="code-box">
-          <div id="modal-code" class="code-text">CODE</div>
+          <div id="modal-code" class="code-text">3HANDS-HTQ1601</div>
           <button class="copy-btn" onclick="copyCode()">Tap To Copy</button>
         </div>
-        <a href="#" id="modal-go-link" target="_blank" class="modal-footer-link">More Coupons >></a>
+        <a href="#" id="modal-go-link" target="_blank" class="modal-footer-link">More Store Coupons >></a>
       </div>
     </div>
   </div>
@@ -119,6 +119,7 @@
     async function loadStore() {
       const urlParams = new URLSearchParams(window.location.search);
       const slug = urlParams.get('slug');
+      const offerId = urlParams.get('offer');
       
       if (!slug) {
         window.location.href = '/';
@@ -165,13 +166,30 @@
           </ol>
         `;
         const aboutSection = document.querySelector('.about-section');
-        aboutSection.appendChild(howTo);
+        if (aboutSection) aboutSection.appendChild(howTo);
+
+        // Bind Get Coupon Alert button to the first deal
+        const alertBtn = document.querySelector('.btn-alert');
+        if (alertBtn) {
+          alertBtn.onclick = () => {
+            if (allDeals.length > 0) {
+              handleOpenDeal(allDeals[0].id);
+            } else {
+              window.location.href = data.link || '/';
+            }
+          };
+        }
 
         renderDeals(allDeals);
 
         // Show content
         document.getElementById('loading').style.display = 'none';
         document.getElementById('store-content').style.display = 'grid';
+
+        // AUTO-SHOW MODAL if offerId is present
+        if (offerId) {
+          showDealModal(offerId);
+        }
 
       } catch (error) {
         console.error("Error loading store:", error);
@@ -200,7 +218,7 @@
             <p>${deal.description || 'Get this amazing deal now!'}</p>
           </div>
           <div class="coupon-action">
-            <a href="javascript:void(0)" class="btn-get" onclick="handleOpenDeal('${deal.id}')">${deal.type === 'code' ? 'Get Code' : 'Get Deal'}</a>
+            <a href="javascript:void(0)" class="btn-get" onclick="handleOpenDeal('${deal.id}')">${deal.code ? 'Get Code' : 'Get Deal'}</a>
           </div>
         `;
         list.appendChild(card);
@@ -211,21 +229,33 @@
       const deal = allDeals.find(d => d.id === dealId);
       if (!deal) return;
 
-      // 1. Open link in new tab
-      window.open(deal.link, '_blank');
+      const urlParams = new URLSearchParams(window.location.search);
+      const slug = urlParams.get('slug');
 
-      // 2. If it's a code, show modal
-      if (deal.type === 'code') {
-        document.getElementById('modal-logo').src = currentStore.image;
-        document.getElementById('modal-title').textContent = deal.title;
-        document.getElementById('modal-store-name').textContent = currentStore.name;
-        document.getElementById('modal-code').textContent = deal.code || 'NO CODE';
-        document.getElementById('modal-go-link').href = deal.link;
-        document.getElementById('modal-go-link').textContent = `More ${currentStore.name} Coupons >>`;
-        document.getElementById('coupon-modal').style.display = 'flex';
-      }
+      // 1. Open current store page with ?offer in a NEW tab
+      const offerUrl = `${window.location.origin}${window.location.pathname}?slug=${slug}&offer=${dealId}`;
+      window.open(offerUrl, '_blank');
+
+      // 2. Redirect CURRENT tab to Affiliate Link
+      // Use setTimeout to ensure window.open finishes first
+      setTimeout(() => {
+        window.location.href = deal.link;
+      }, 100);
 
       trackClick(dealId);
+    }
+
+    function showDealModal(dealId) {
+      const deal = allDeals.find(d => d.id === dealId);
+      if (!deal) return;
+
+      document.getElementById('modal-logo').src = currentStore.image;
+      document.getElementById('modal-title').textContent = deal.title;
+      document.getElementById('modal-store-name').textContent = currentStore.name;
+      document.getElementById('modal-code').textContent = deal.code || 'NO CODE';
+      document.getElementById('modal-go-link').href = deal.link;
+      document.getElementById('modal-go-link').textContent = `More ${currentStore.name} Coupons >>`;
+      document.getElementById('coupon-modal').style.display = 'flex';
     }
 
     function closeModal() {
@@ -248,7 +278,7 @@
 
     function filterDeals(type) {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      if (event) event.target.classList.add('active');
+      event.target.classList.add('active');
 
       if (type === 'all') renderDeals(allDeals);
       else if (type === 'verified') renderDeals(allDeals.filter(d => d.isVerified));
