@@ -109,14 +109,14 @@
 
         // Populate Popular Stores
         const storesContainer = document.getElementById('stores-container');
-        siteData.popularStores.forEach(store => {
+        (siteData.popularStores || []).forEach(store => {
           const card = document.createElement('a');
           card.href = `store.html?slug=${store.slug}`;
           card.className = 'store-card';
           
           let imgSrc = store.image;
           if (!imgSrc) {
-            const initial = store.name.substring(0, 2).toUpperCase();
+            const initial = (store.name || 'S').substring(0, 2).toUpperCase();
             imgSrc = `https://placehold.co/200x200/f8fafc/1e293b?text=${initial}`;
           }
           
@@ -142,7 +142,7 @@
 
         // Populate Deals
         const dealsContainer = document.getElementById('deals-container');
-        siteData.deals.forEach(deal => {
+        (siteData.deals || []).forEach(deal => {
           const card = document.createElement('div');
           card.className = 'deal-card animate';
           card.innerHTML = `
@@ -166,7 +166,7 @@
 
         // Populate Categories
         const categoriesContainer = document.getElementById('categories-container');
-        siteData.categories.forEach(cat => {
+        (siteData.categories || []).forEach(cat => {
           const btn = document.createElement('a');
           btn.href = cat.link;
           btn.className = 'category-btn';
@@ -177,7 +177,7 @@
         // Populate Blog
         if (siteData.blogPosts) {
           const blogContainer = document.getElementById('blog-container');
-          siteData.blogPosts.forEach(post => {
+          (siteData.blogPosts || []).forEach(post => {
             const item = document.createElement('div');
             item.className = 'blog-item animate';
             item.innerHTML = `
@@ -209,7 +209,7 @@
         }
 
       } catch (error) {
-        console.error("Error loading data:", error);
+        console.error("Lỗi khi tải dữ liệu từ Backend:", error);
       }
     }
 
