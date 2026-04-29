@@ -11,6 +11,22 @@
     /* Inline fixes for structural integrity */
     #loading { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; }
     .store-layout { display: none; } /* Hidden by default, shown by JS */
+    
+    .faq-section { margin-top: 40px; }
+    .faq-item { margin-bottom: 20px; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; }
+    .faq-question { font-weight: 700; color: #1e293b; margin-bottom: 8px; font-size: 1.1rem; }
+    .faq-answer { color: #64748b; line-height: 1.6; }
+    
+    .how-to-guide { 
+      margin-top: 40px; 
+      background: #f8fafc; 
+      border: 1px solid #e2e8f0; 
+      border-radius: 12px; 
+      padding: 25px; 
+    }
+    .how-to-guide h2 { margin-bottom: 15px; font-size: 1.5rem; }
+    .guide-step { margin-bottom: 12px; line-height: 1.6; color: #334155; }
+    .guide-step b { color: #0f172a; }
   </style>
 </head>
 <body>
@@ -91,6 +107,26 @@
           <div id="store-review-body" class="content-body">
             <!-- Review content here -->
           </div>
+          
+          <!-- How to apply section (DYNAMIC) -->
+          <div class="how-to-guide" id="how-to-apply">
+            <h2>How to apply <span class="dynamic-store-name">Store</span> coupon codes</h2>
+            <div class="guide-step">
+              <b>Step 1:</b> Find your <span class="dynamic-store-name">Store</span> Coupons, discount codes on this page or <b>Boboreviews</b> and click <b>"GET CODE"</b> button to view the code, then click "Copy" and the coupons, discount codes will be copied to your phone's or computer's clipboard.
+            </div>
+            <div class="guide-step">
+              <b>Step 2:</b> Go to <span class="dynamic-store-name">Store</span> then select all items you want to buy and add to shopping cart. When finished shopping, go to the <span class="dynamic-store-name">Store</span> checkout page.
+            </div>
+            <div class="guide-step">
+              <b>Step 3:</b> During checkout, find the text "Promo Code" or "Discount Code" and paste your <span class="dynamic-store-name">Store</span> coupons, discount codes in step 1 to this box. Click "Apply" and your savings for <span class="dynamic-store-name">Store</span> will be applied.
+            </div>
+          </div>
+
+          <!-- FAQ Section (DYNAMIC) -->
+          <div class="faq-section" id="faq-container" style="display: none;">
+            <h2>Frequently Asked Questions</h2>
+            <div id="faq-list"></div>
+          </div>
         </div>
       </section>
     </div>
@@ -122,7 +158,6 @@
       const slug = urlParams.get('slug');
       const offerId = urlParams.get('offer');
       
-      // OPTIMIZATION: If we have modal data in the URL, show it IMMEDIATELY
       const urlTitle = urlParams.get('title');
       const urlCode = urlParams.get('code');
       const urlLink = urlParams.get('link');
@@ -156,25 +191,22 @@
           document.getElementById('store-banner-container').style.display = 'block';
         }
 
-        // 2. Fill Sidebar
+        // 2. Fill Sidebar & Dynamic Names
         const storeLogo = document.getElementById('store-logo');
         if (storeLogo) storeLogo.src = data.image || 'favicon.png';
         
-        const sidebarName = document.getElementById('sidebar-name');
-        if (sidebarName) sidebarName.textContent = data.name;
+        document.getElementById('sidebar-name').textContent = data.name;
+        document.getElementById('about-store-name').textContent = data.name;
+        document.getElementById('promo-title').textContent = `${data.name} Coupons and Promo Codes`;
         
-        const aboutName = document.getElementById('about-store-name');
-        if (aboutName) aboutName.textContent = data.name;
+        document.querySelectorAll('.dynamic-store-name').forEach(el => {
+          el.textContent = data.name;
+        });
         
-        const promoTitle = document.getElementById('promo-title');
-        if (promoTitle) promoTitle.textContent = `${data.name} Coupons and Promo Codes`;
-        
-        const voteCount = document.getElementById('vote-count');
-        if (voteCount) voteCount.textContent = `${data.rating?.toFixed(1) || '5.0'} / ${data.totalVotes?.toLocaleString() || '1,250'} votes`;
+        document.getElementById('vote-count').textContent = `${data.rating?.toFixed(1) || '5.0'} / ${data.totalVotes?.toLocaleString() || '1,250'} votes`;
         
         const alertBtn = document.querySelector('.btn-alert');
         if (alertBtn) {
-          alertBtn.style.cursor = 'pointer';
           alertBtn.onclick = () => {
             if (allDeals.length > 0) handleOpenDeal(allDeals[0].id);
             else window.open(data.link || '#', '_blank');
@@ -199,21 +231,35 @@
         // 4. Fill Review
         document.getElementById('store-review-body').innerHTML = data.content || `Welcome to ${data.name}. Enjoy the best deals and coupons verified daily.`;
 
-        // 5. Render Deals
+        // 5. Fill FAQs
+        if (data.faqs && data.faqs.length > 0) {
+          const faqList = document.getElementById('faq-list');
+          faqList.innerHTML = '';
+          data.faqs.forEach(faq => {
+            const item = document.createElement('div');
+            item.className = 'faq-item';
+            item.innerHTML = `
+              <div class="faq-question">Q: ${faq.question}</div>
+              <div class="faq-answer">${faq.answer}</div>
+            `;
+            faqList.appendChild(item);
+          });
+          document.getElementById('faq-container').style.display = 'block';
+        }
+
+        // 6. Render Deals
         renderDeals(allDeals);
 
-        // 6. Show Content
+        // 7. Show Content
         document.getElementById('loading').style.display = 'none';
         document.getElementById('store-content').style.display = 'grid';
 
-        // 7. Auto-show modal if offerId present (and not already shown by instant logic)
         if (offerId && !urlTitle) {
           showDealModal(offerId);
         }
 
       } catch (error) {
         console.error("Load Store Error:", error);
-        document.getElementById('loading').innerHTML = '<h2 style="color: #ef4444;">Connection Error</h2><p>Please check your internet and try again.</p>';
       }
     }
 
@@ -225,18 +271,13 @@
       dealsToRender.forEach(deal => {
         const card = document.createElement('div');
         card.className = 'coupon-card';
-        
         const discountVal = deal.discountValue || deal.discount || 'SALE';
         const dealCode = deal.code || '';
 
         if (dealCode) {
-          // Show last 3 chars as hint
           const hint = dealCode.length > 3 ? `...${dealCode.slice(-3)}` : dealCode;
           card.innerHTML = `
-            <div class="save-badge">
-              <span class="amount">${discountVal}</span>
-              <span class="label">OFF</span>
-            </div>
+            <div class="save-badge"><span class="amount">${discountVal}</span></div>
             <div class="coupon-info">
               <div class="verified-tag">Verified Code</div>
               <h3>${deal.title}</h3>
@@ -251,10 +292,7 @@
           `;
         } else {
           card.innerHTML = `
-            <div class="save-badge">
-              <span class="amount">${discountVal}</span>
-              <span class="label">OFF</span>
-            </div>
+            <div class="save-badge"><span class="amount">${discountVal}</span></div>
             <div class="coupon-info">
               <div class="verified-tag" style="color: #64748b; border-color: #e2e8f0;">Verified Deal</div>
               <h3>${deal.title}</h3>
@@ -279,9 +317,6 @@
     window.handleOpenDeal = function(dealId) {
       const deal = allDeals.find(d => d.id === dealId);
       if (!deal) return;
-      
-      // THE "GOD TIER" INSTANT REVERSE TECHNIQUE
-      // 1. Open current page with ALL modal data in a NEW tab (This tab will be the ACTIVE one Focused)
       const currentUrl = window.location.href.split('?')[0];
       const couponParams = new URLSearchParams({
         slug: currentStore.slug,
@@ -291,18 +326,13 @@
         link: deal.link
       });
       window.open(`${currentUrl}?${couponParams.toString()}`, '_blank');
-      
-      // 2. Redirect the ORIGINAL tab to the affiliate link (This tab stays in the background)
       window.location.href = deal.link;
-      
-      // Track click
       fetch(`https://admin.boboreviews.com/api/deals/${dealId}/click`, { method: 'POST' }).catch(() => {});
     };
 
     window.showInstantModal = function(title, code, link) {
       const modalContent = document.getElementById('modal-dynamic-content');
-      const logo = 'favicon.png'; // Fallback until full store loads
-      
+      const logo = 'favicon.png';
       if (code && code !== 'null') {
         modalContent.innerHTML = `
           <img src="${logo}" alt="Logo" class="modal-store-logo">
