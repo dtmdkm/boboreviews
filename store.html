@@ -271,13 +271,15 @@
       const deal = allDeals.find(d => d.id === dealId);
       if (!deal) return;
       
-      // Open modal in this tab
+      // 1. Show modal in this tab FIRST
       showDealModal(dealId);
       
-      // Open affiliate link in NEW tab
-      window.open(deal.link, '_blank');
+      // 2. Open affiliate link in NEW tab after a tiny delay
+      setTimeout(() => {
+        window.open(deal.link, '_blank');
+      }, 150);
       
-      // Track click (Optional)
+      // Track click
       fetch(`https://admin.boboreviews.com/api/deals/${dealId}/click`, { method: 'POST' }).catch(() => {});
     };
 
