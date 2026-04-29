@@ -45,11 +45,11 @@ header { background: #ffffff !important; border-bottom: 1px solid #edf2f7; paddi
 .store-card { 
   flex: 0 0 auto; 
   background: white; 
-  padding: 24px 16px; 
+  padding: 15px; 
   border-radius: 20px; 
   border: 1px solid rgba(0,0,0,0.05); 
   text-align: center; 
-  min-width: 170px; 
+  min-width: 160px; 
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
   box-shadow: 0 4px 12px rgba(0,0,0,0.03);
   display: flex;
