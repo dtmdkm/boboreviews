@@ -33,7 +33,7 @@
         <h2>Popular Stores</h2>
         <div class="slider-nav">
           <button id="slide-left" class="nav-btn" aria-label="Previous">←</button>
-          <button id="slide-right" class="nav-btn" aria-label="Next">←</button>
+          <button id="slide-right" class="nav-btn" aria-label="Next">→</button>
         </div>
       </div>
       <div class="slider-container">
@@ -110,6 +110,7 @@
   </footer>
 
   <script type="module">
+    // Hàm khởi tạo lấy dữ liệu từ hệ thống Backend mới
     async function initSite() {
       try {
         const response = await fetch('https://admin.boboreviews.com/api/data');
@@ -156,18 +157,24 @@
         (siteData.deals || []).forEach(deal => {
           const card = document.createElement('div');
           card.className = 'deal-card animate';
+          
+          const desc = deal.description || '';
+          const oldPrice = deal.price || '';
+          const newPrice = deal.discountPrice || '';
+          const image = deal.image || 'https://placehold.co/800x600/f8fafc/1e293b?text=Deal';
+
           card.innerHTML = `
             <a href="${deal.link}" style="display: contents;">
-              <img src="${deal.image}" alt="${deal.title}" class="deal-image" onerror="this.src='https://placehold.co/800x600/f8fafc/1e293b?text=Image+Not+Available'">
+              <img src="${image}" alt="${deal.title}" class="deal-image" onerror="this.src='https://placehold.co/800x600/f8fafc/1e293b?text=Image+Not+Available'">
             </a>
             <div class="deal-content">
               <a href="${deal.link}" style="color: inherit; text-decoration: none;">
                 <h3 class="deal-title" style="transition: color 0.3s ease;">${deal.title}</h3>
               </a>
-              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">${deal.description}</p>
+              ${desc ? `<p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.4;">${desc}</p>` : ''}
               <div class="deal-prices">
-                <span class="price-old">${deal.price}</span>
-                <span class="price-new">${deal.discountPrice}</span>
+                ${oldPrice ? `<span class="price-old">${oldPrice}</span>` : ''}
+                ${newPrice ? `<span class="price-new">${newPrice}</span>` : ''}
               </div>
               <a href="${deal.link}" class="btn-deal">Get Deal</a>
             </div>
@@ -220,10 +227,11 @@
         }
 
       } catch (error) {
-        console.error("Error loading data from Backend:", error);
+        console.error("Lỗi khi tải dữ liệu từ Backend:", error);
       }
     }
 
+    // Khởi chạy
     initSite();
   </script>
 </body>
