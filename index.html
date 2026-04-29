@@ -38,7 +38,13 @@
       </div>
       <div class="slider-container">
         <div class="stores-slider" id="stores-container">
-          <!-- Dynamically populated -->
+          <!-- Skeletons -->
+          <div class="skeleton-store skeleton"></div>
+          <div class="skeleton-store skeleton"></div>
+          <div class="skeleton-store skeleton"></div>
+          <div class="skeleton-store skeleton"></div>
+          <div class="skeleton-store skeleton"></div>
+          <div class="skeleton-store skeleton"></div>
         </div>
       </div>
     </section>
@@ -49,7 +55,10 @@
         <a href="deals.html" style="color: var(--primary); font-weight: 600;">View All →</a>
       </div>
       <div class="deals-grid" id="deals-container">
-        <!-- Dynamically populated -->
+        <!-- Skeletons -->
+        <div class="skeleton-deal skeleton"></div>
+        <div class="skeleton-deal skeleton"></div>
+        <div class="skeleton-deal skeleton"></div>
       </div>
     </section>
 
@@ -101,18 +110,14 @@
   </footer>
 
   <script type="module">
-    // Hàm khởi tạo lấy dữ liệu từ hệ thống Backend mới
     async function initSite() {
       try {
-        // LƯU Ý QUAN TRỌNG: 
-        // Hiện tại đang gọi đến localhost để bạn test trên máy.
-        // Khi đẩy Backend lên mạng thực tế (ví dụ: Render.com), 
-        // bạn cần SỬA LẠI ĐƯỜNG LINK NÀY thành link thật (vd: https://bobo-api.onrender.com/api/data)
         const response = await fetch('https://admin.boboreviews.com/api/data');
         const siteData = await response.json();
 
         // Populate Popular Stores
         const storesContainer = document.getElementById('stores-container');
+        storesContainer.innerHTML = ''; // Clear Skeletons
         (siteData.popularStores || []).forEach(store => {
           const card = document.createElement('a');
           card.href = `store.html?slug=${store.slug}`;
@@ -147,6 +152,7 @@
 
         // Populate Deals
         const dealsContainer = document.getElementById('deals-container');
+        dealsContainer.innerHTML = ''; // Clear Skeletons
         (siteData.deals || []).forEach(deal => {
           const card = document.createElement('div');
           card.className = 'deal-card animate';
@@ -214,11 +220,10 @@
         }
 
       } catch (error) {
-        console.error("Lỗi khi tải dữ liệu từ Backend:", error);
+        console.error("Error loading data from Backend:", error);
       }
     }
 
-    // Khởi chạy
     initSite();
   </script>
 </body>
