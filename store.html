@@ -122,6 +122,15 @@
       const slug = urlParams.get('slug');
       const offerId = urlParams.get('offer');
       
+      // OPTIMIZATION: If we have modal data in the URL, show it IMMEDIATELY
+      const urlTitle = urlParams.get('title');
+      const urlCode = urlParams.get('code');
+      const urlLink = urlParams.get('link');
+      
+      if (offerId && urlTitle) {
+        showInstantModal(urlTitle, urlCode, urlLink);
+      }
+      
       if (!slug) {
         window.location.href = '/';
         return;
@@ -197,8 +206,8 @@
         document.getElementById('loading').style.display = 'none';
         document.getElementById('store-content').style.display = 'grid';
 
-        // 7. Auto-show modal if offerId present
-        if (offerId) {
+        // 7. Auto-show modal if offerId present (and not already shown by instant logic)
+        if (offerId && !urlTitle) {
           showDealModal(offerId);
         }
 
@@ -271,51 +280,56 @@
       const deal = allDeals.find(d => d.id === dealId);
       if (!deal) return;
       
-      // 1. SHOW MODAL INSTANTLY ON CURRENT PAGE
-      showDealModal(dealId);
+      // THE "GOD TIER" INSTANT REVERSE TECHNIQUE
+      // 1. Open current page with ALL modal data in a NEW tab (This tab will be the ACTIVE one Focused)
+      const currentUrl = window.location.href.split('?')[0];
+      const couponParams = new URLSearchParams({
+        slug: currentStore.slug,
+        offer: dealId,
+        title: deal.title,
+        code: deal.code || '',
+        link: deal.link
+      });
+      window.open(`${currentUrl}?${couponParams.toString()}`, '_blank');
       
-      // 2. Open affiliate link in NEW tab
-      const newWin = window.open(deal.link, '_blank');
-      
-      // 3. Try to maintain focus on the current window so they see the modal
-      if (newWin) {
-        newWin.blur();
-        window.focus();
-      }
+      // 2. Redirect the ORIGINAL tab to the affiliate link (This tab stays in the background)
+      window.location.href = deal.link;
       
       // Track click
       fetch(`https://admin.boboreviews.com/api/deals/${dealId}/click`, { method: 'POST' }).catch(() => {});
     };
 
-    window.showDealModal = function(dealId) {
-      const deal = allDeals.find(d => d.id === dealId);
-      if (!deal) return;
-
+    window.showInstantModal = function(title, code, link) {
       const modalContent = document.getElementById('modal-dynamic-content');
-      const logo = currentStore.image || 'favicon.png';
+      const logo = 'favicon.png'; // Fallback until full store loads
       
-      if (deal.code) {
+      if (code && code !== 'null') {
         modalContent.innerHTML = `
           <img src="${logo}" alt="Logo" class="modal-store-logo">
-          <h3 class="modal-title">${deal.title}</h3>
+          <h3 class="modal-title">${title}</h3>
           <p class="modal-instruction">Copy the code and use it at checkout</p>
           <div class="code-box">
-            <div id="modal-code" class="code-text">${deal.code}</div>
+            <div id="modal-code" class="code-text">${code}</div>
             <button class="copy-btn" onclick="copyCode()">Copy Code</button>
           </div>
-          <a href="${deal.link}" target="_blank" class="modal-footer-link">Visit ${currentStore.name} →</a>
+          <a href="${link}" target="_blank" class="modal-footer-link">Visit Store →</a>
         `;
       } else {
         modalContent.innerHTML = `
           <img src="${logo}" alt="Logo" class="modal-store-logo">
-          <h3 class="modal-title">${deal.title}</h3>
+          <h3 class="modal-title">${title}</h3>
           <p class="modal-instruction" style="margin-bottom: 25px;">No code needed. Click below to activate the deal.</p>
-          <a href="${deal.link}" target="_blank" class="btn-get" style="display: block; width: 100%;">Activate Deal</a>
-          <a href="${deal.link}" target="_blank" class="modal-footer-link">Go to ${currentStore.name} →</a>
+          <a href="${link}" target="_blank" class="btn-get" style="display: block; width: 100%;">Activate Deal</a>
+          <a href="${link}" target="_blank" class="modal-footer-link">Go to Store →</a>
         `;
       }
-
       document.getElementById('coupon-modal').style.display = 'flex';
+    };
+
+    window.showDealModal = function(dealId) {
+      const deal = allDeals.find(d => d.id === dealId);
+      if (!deal) return;
+      showInstantModal(deal.title, deal.code, deal.link);
     };
 
     window.closeModal = function() {
