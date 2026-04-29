@@ -43,7 +43,7 @@
     
     .about-section { margin-top: 60px; padding: 40px; background: white; border-radius: 12px; border: 1px solid #eee; }
     .about-section h2 { margin-bottom: 20px; font-size: 1.5rem; color: #1e293b; }
-    .content-body { color: #475569; line-height: 1.8; margin-bottom: 40px; }
+    .content-body { color: #475569; line-height: 1.8; margin-bottom: 40px; white-space: pre-wrap; }
     
     /* New styles from coreluxreview */
     .people-also-ask-container { margin-top: 40px; padding-top: 30px; border-top: 1px solid #eee; }
@@ -214,6 +214,7 @@
         descP.style.fontSize = '1rem';
         descP.style.marginTop = '8px';
         descP.style.fontStyle = 'italic';
+        descP.style.whiteSpace = 'pre-wrap';
         descP.textContent = data.description || '';
         document.querySelector('.promo-header').appendChild(descP);
 
@@ -336,7 +337,6 @@
         card.innerHTML = `
           <div class="save-badge">
             <span class="amount">${discountVal}</span>
-            <span class="label">OFF</span>
           </div>
           <div class="coupon-info">
             ${deal.isVerified ? '<span class="verified-tag">Verified Deal</span>' : ''}
