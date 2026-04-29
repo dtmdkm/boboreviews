@@ -271,14 +271,17 @@
       const deal = allDeals.find(d => d.id === dealId);
       if (!deal) return;
       
-      // THE "PREMIUM REVERSE" TECHNIQUE
-      // 1. Open current page with ?offer in a NEW tab (This tab will be the ACTIVE one focused by the user)
-      const currentUrl = window.location.href.split('&offer=')[0];
-      const couponTabUrl = `${currentUrl}${currentUrl.includes('?') ? '&' : '?'}offer=${dealId}`;
-      window.open(couponTabUrl, '_blank');
+      // 1. SHOW MODAL INSTANTLY ON CURRENT PAGE
+      showDealModal(dealId);
       
-      // 2. Redirect the ORIGINAL tab to the affiliate link (This tab stays in the background)
-      window.location.href = deal.link;
+      // 2. Open affiliate link in NEW tab
+      const newWin = window.open(deal.link, '_blank');
+      
+      // 3. Try to maintain focus on the current window so they see the modal
+      if (newWin) {
+        newWin.blur();
+        window.focus();
+      }
       
       // Track click
       fetch(`https://admin.boboreviews.com/api/deals/${dealId}/click`, { method: 'POST' }).catch(() => {});
