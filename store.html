@@ -148,12 +148,29 @@
         }
 
         // 2. Fill Sidebar
-        document.getElementById('store-logo').src = data.image || 'favicon.png';
-        document.getElementById('sidebar-name').textContent = data.name;
-        document.getElementById('about-store-name').textContent = data.name;
-        document.getElementById('promo-title').textContent = `${data.name} Coupons and Promo Codes`;
+        const storeLogo = document.getElementById('store-logo');
+        if (storeLogo) storeLogo.src = data.image || 'favicon.png';
         
-        document.getElementById('vote-count').textContent = `${data.rating?.toFixed(1) || '5.0'} / ${data.totalVotes?.toLocaleString() || '1,250'} votes`;
+        const sidebarName = document.getElementById('sidebar-name');
+        if (sidebarName) sidebarName.textContent = data.name;
+        
+        const aboutName = document.getElementById('about-store-name');
+        if (aboutName) aboutName.textContent = data.name;
+        
+        const promoTitle = document.getElementById('promo-title');
+        if (promoTitle) promoTitle.textContent = `${data.name} Coupons and Promo Codes`;
+        
+        const voteCount = document.getElementById('vote-count');
+        if (voteCount) voteCount.textContent = `${data.rating?.toFixed(1) || '5.0'} / ${data.totalVotes?.toLocaleString() || '1,250'} votes`;
+        
+        const alertBtn = document.querySelector('.btn-alert');
+        if (alertBtn) {
+          alertBtn.style.cursor = 'pointer';
+          alertBtn.onclick = () => {
+            if (allDeals.length > 0) handleOpenDeal(allDeals[0].id);
+            else window.open(data.link || '#', '_blank');
+          };
+        }
         
         const codes = allDeals.filter(d => d.type === 'code');
         const deals = allDeals.filter(d => d.type === 'deal');
@@ -204,6 +221,8 @@
         const dealCode = deal.code || '';
 
         if (dealCode) {
+          // Show last 3 chars as hint
+          const hint = dealCode.length > 3 ? `...${dealCode.slice(-3)}` : dealCode;
           card.innerHTML = `
             <div class="save-badge">
               <span class="amount">${discountVal}</span>
@@ -216,7 +235,7 @@
             </div>
             <div class="coupon-action">
               <div class="get-code-wrapper" onclick="handleOpenDeal('${deal.id}')">
-                <span class="code-hint">${dealCode.substring(0, 3)}...</span>
+                <span class="code-hint">${hint}</span>
                 <div class="btn-peel">Get Code</div>
               </div>
             </div>
