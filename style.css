@@ -180,12 +180,12 @@ header { background: #ffffff !important; border-bottom: 1px solid #edf2f7; paddi
 
 .store-profile-header {
   display: flex;
-  align-items: flex-end;
+  align-items: center; /* Changed from flex-end to center for better balance */
   padding: 0 40px;
-  margin-top: -70px;
+  margin-top: -60px; /* Slightly less overlap for cleaner look */
   position: relative;
   z-index: 10;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 .store-logo-wrap {
   background: white;
@@ -208,16 +208,31 @@ header { background: #ffffff !important; border-bottom: 1px solid #edf2f7; paddi
 
 .store-info-wrap {
   margin-left: 30px;
-  margin-bottom: 20px;
+  margin-top: 50px; /* Push text down to sit on white background */
   flex: 1;
 }
 .store-title-main {
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   margin: 0;
-  color: #1e293b;
-  font-weight: 800;
-  letter-spacing: -0.025em;
-  text-shadow: 0 2px 10px rgba(255,255,255,0.5);
+  color: #0f172a; /* Deep elegant slate */
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  background: #e0f2fe;
+  color: #0ea5e9;
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid #bae6fd;
 }
 .store-meta-main {
   display: flex;
@@ -349,10 +364,10 @@ header { background: #ffffff !important; border-bottom: 1px solid #edf2f7; paddi
 
 .about-section { margin-top: 50px; padding: 40px; background: white; border-radius: 16px; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
 .about-section h2 { font-size: 1.6rem; margin-bottom: 25px; border-bottom: 3px solid #22c55e; display: inline-block; padding-bottom: 5px; color: #1e293b; }
-.content-body { color: #475569; font-size: 1rem; line-height: 1.8; }
-.content-body p { margin-bottom: 1.25rem; }
-.content-body h3 { font-size: 1.25rem; margin-top: 2rem; margin-bottom: 1rem; color: #1e293b; }
-.content-body strong { color: #1e293b; font-weight: 600; }
+.content-body { color: #334155; font-size: 1.05rem; line-height: 1.8; }
+.content-body p { margin-bottom: 1.5rem; }
+.content-body h3 { font-size: 1.3rem; margin-top: 2.5rem; margin-bottom: 1.25rem; color: #0f172a; font-weight: 700; }
+.content-body strong { color: #0f172a; font-weight: 700; }
 .content-body ul, .content-body ol { margin-bottom: 1.5rem; padding-left: 1.5rem; }
 .content-body li { margin-bottom: 0.8rem; }
 

@@ -59,7 +59,13 @@
           <img id="store-logo-main" src="" alt="Logo" onerror="this.src='favicon.png'">
         </div>
         <div class="store-info-wrap">
-          <h1 id="main-store-name" class="store-title-main"></h1>
+          <h1 class="store-title-main">
+            <span id="main-store-name"></span>
+            <span class="verified-badge">
+              <svg style="width:14px;height:14px;margin-right:4px;fill:currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+              Verified
+            </span>
+          </h1>
           <div class="store-meta-main">
             <div class="stars">★★★★★</div>
             <span id="main-vote-count" class="vote-text"></span>
@@ -231,7 +237,6 @@
         // 1. Fill Hero & Banner
         if (data.banner) {
           document.getElementById('store-banner-img').src = data.banner;
-          document.getElementById('main-store-name').textContent = data.name;
           document.getElementById('store-hero').style.display = 'block';
         }
 
@@ -246,6 +251,7 @@
         
         const voteText = `${data.rating?.toFixed(1) || '5.0'} / ${data.totalVotes?.toLocaleString() || '1,250'} votes`;
         document.getElementById('main-vote-count').textContent = voteText;
+        document.getElementById('main-store-name').textContent = data.name;
         document.getElementById('about-store-name').textContent = data.name;
         
         const alertBtn = document.querySelector('.btn-alert');
