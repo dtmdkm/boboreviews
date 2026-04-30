@@ -119,26 +119,24 @@ header { background: #ffffff !important; border-bottom: 1px solid #edf2f7; paddi
 .categories-grid { 
   display: flex; 
   flex-wrap: wrap; 
-  gap: 12px; 
+  gap: 10px; 
   margin: 25px 0; 
 }
 .category-btn { 
-  background: #ffffff; 
-  border: 1px solid #e2e8f0; 
-  padding: 8px 18px; 
-  border-radius: 8px; 
-  font-size: 0.85rem; 
+  background: #222; 
+  border: none; 
+  padding: 6px 12px; 
+  border-radius: 4px; 
+  font-size: 0.75rem; 
   font-weight: 500; 
-  color: #475569; 
+  color: #ccc; 
   transition: all 0.3s ease;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
   text-decoration: none !important;
 }
 .category-btn:hover { 
-  border-color: #22c55e; 
-  color: #22c55e; 
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  background: #333; 
+  color: #fff; 
+  transform: translateY(-1px);
 }
 
 /* Store Detail Specific Styles */
@@ -297,9 +295,14 @@ header { background: #ffffff !important; border-bottom: 1px solid #edf2f7; paddi
 @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
 /* Footer */
-footer { background: #1e293b; color: white; padding: 4rem 0 2rem; margin-top: 5rem; }
-.footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem; }
-.footer-col h4 { color: white; margin-bottom: 1.5rem; }
+footer { background: #004d00; color: white; padding: 4rem 0 2rem; margin-top: 5rem; }
+.footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 3rem; }
+.footer-col h4 { color: #90ee90; margin-bottom: 1.5rem; font-size: 1.1rem; }
 .footer-col ul { list-style: none; }
-.footer-col ul li { margin-bottom: 0.8rem; font-size: 0.9rem; color: #94a3b8; }
-.footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 3rem; padding-top: 2rem; text-align: center; font-size: 0.8rem; color: #64748b; }
+.footer-col ul li { margin-bottom: 0.8rem; font-size: 0.9rem; color: white; }
+.footer-col ul li a:hover { text-decoration: underline; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 3rem; padding-top: 2rem; text-align: center; font-size: 0.8rem; color: #bbf7d0; }
+
+.social-links { display: flex; gap: 15px; margin-top: 10px; }
+.social-links a { display: flex; align-items: center; justify-content: center; width: 35px; height: 35px; background: rgba(255,255,255,0.1); border-radius: 50%; transition: 0.3s; }
+.social-links a:hover { background: #22c55e; transform: translateY(-3px); }
