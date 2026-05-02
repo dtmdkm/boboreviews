@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="referrer" content="no-referrer">
   <title>Category | Boboreviews</title>
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="stylesheet" href="/style.css">
   <style>
     :root {
       --card-bg: #ffffff;
@@ -112,8 +112,6 @@
       max-width: 400px;
       margin: 0 auto 24px auto;
     }
-
-    /* Skeleton Loading */
     .skeleton-item {
       height: 92px;
       background: #eee;
@@ -156,8 +154,20 @@
 
   <script type="module">
     async function fetchCategoryData() {
-      const params = new URLSearchParams(window.location.search);
-      const slug = params.get('slug');
+      // Extract slug from URL pathname (e.g. /category/ai -> ai)
+      const pathname = window.location.pathname;
+      const pathParts = pathname.split('/');
+      let slug = '';
+      if (pathParts.includes('category')) {
+        slug = pathParts[pathParts.indexOf('category') + 1];
+      }
+      
+      // Fallback to query param
+      if (!slug) {
+        const params = new URLSearchParams(window.location.search);
+        slug = params.get('slug');
+      }
+
       if (!slug) return window.location.href = '/';
 
       const container = document.getElementById('stores-list-container');
