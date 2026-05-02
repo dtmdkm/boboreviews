@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>Category | Boboreviews</title>
+  <meta name="description" content="Browse stores by category on Boboreviews.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .category-header {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      padding: 40px 0;
+      margin-bottom: 40px;
+      border-radius: 24px;
+      text-align: center;
+    }
+    .category-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .stores-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 24px;
+    }
+    .store-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 24px;
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+    }
+    .store-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--secondary);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+    .store-logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 16px;
+      object-fit: cover;
+      margin-bottom: 16px;
+      background: white;
+      padding: 5px;
+    }
+    .store-name {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container header-inner">
+      <a href="/" class="logo" style="display: flex; align-items: center;">
+        <img src="favicon.png" alt="Logo" style="height: 32px; margin-right: 8px; border-radius: 4px;">
+        BOBO<span>REVIEWS</span>
+      </a>
+      <div class="search-bar">
+        <input type="text" placeholder="Search stores...">
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="category-header animate">
+      <h1 id="category-title">Loading Category...</h1>
+      <p id="category-count" style="color: var(--text-muted);"></p>
+    </div>
+
+    <div class="stores-grid" id="stores-container">
+      <!-- Skeletons -->
+      <div class="skeleton-store skeleton" style="height: 200px; border-radius: 20px;"></div>
+      <div class="skeleton-store skeleton" style="height: 200px; border-radius: 20px;"></div>
+      <div class="skeleton-store skeleton" style="height: 200px; border-radius: 20px;"></div>
+      <div class="skeleton-store skeleton" style="height: 200px; border-radius: 20px;"></div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 Boboreviews. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module">
+    async function initCategory() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const slug = urlParams.get('slug');
+      
+      if (!slug) {
+        window.location.href = '/';
+        return;
+      }
+
+      try {
+        const response = await fetch('https://admin.boboreviews.com/api/data');
+        const data = await response.json();
+
+        const category = data.categories.find(c => c.slug === slug);
+        const storesContainer = document.getElementById('stores-container');
+        storesContainer.innerHTML = '';
+
+        if (!category) {
+          document.getElementById('category-title').textContent = "Category Not Found";
+          return;
+        }
+
+        document.getElementById('category-title').textContent = category.name;
+        document.title = `${category.name} Coupons & Deals | Boboreviews`;
+
+        const categoryId = category.id || category._id;
+        const filteredStores = data.popularStores.filter(s => s.categoryId === categoryId);
+
+        document.getElementById('category-count').textContent = `${filteredStores.length} stores available`;
+
+        if (filteredStores.length === 0) {
+          storesContainer.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; background: var(--glass); border-radius: 24px; border: 1px dashed var(--glass-border);">
+              <div style="font-size: 48px; margin-bottom: 20px;">📭</div>
+              <h3 style="margin-bottom: 10px;">Chưa có cửa hàng nào!</h3>
+              <p style="color: var(--text-muted);">Hiện tại chưa có cửa hàng nào được gán vào danh mục này. Vui lòng quay lại sau.</p>
+              <a href="/" class="btn-deal" style="display: inline-block; margin-top: 20px; width: auto; padding: 12px 30px;">Quay lại Trang chủ</a>
+            </div>
+          `;
+        } else {
+          filteredStores.forEach(store => {
+            const card = document.createElement('a');
+            card.href = `/store/${store.slug}`;
+            card.className = 'store-card animate';
+            
+            let imgSrc = store.image;
+            if (!imgSrc) {
+              const initial = (store.name || 'S').substring(0, 2).toUpperCase();
+              imgSrc = `https://placehold.co/200x200/f8fafc/1e293b?text=${initial}`;
+            }
+
+            card.innerHTML = `
+              <img src="${imgSrc}" alt="${store.name}" class="store-logo" onerror="this.src='https://placehold.co/200x200/f8fafc/1e293b?text=N/A'">
+              <span class="store-name">${store.name}</span>
+              <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">${store.rating || 5}.0 ⭐ Rating</p>
+            `;
+            storesContainer.appendChild(card);
+          });
+        }
+      } catch (error) {
+        console.error("Error loading category data:", error);
+      }
+    }
+
+    initCategory();
+  </script>
+</body>
+</html>
