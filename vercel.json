@@ -1,18 +1,5 @@
 {
-  "redirects": [
-    {
-      "source": "/store.html",
-      "has": [
-        {
-          "type": "query",
-          "key": "slug",
-          "value": "(?<slug>.*)"
-        }
-      ],
-      "destination": "/store/:slug",
-      "permanent": true
-    }
-  ],
+  "cleanUrls": true,
   "rewrites": [
     {
       "source": "/store/:slug",
