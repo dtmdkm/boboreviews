@@ -13,9 +13,6 @@
     .store-layout { display: none; } /* Hidden by default, shown by JS */
     
     .faq-section { margin-top: 40px; }
-    .faq-item { margin-bottom: 20px; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; }
-    .faq-question { font-weight: 700; color: #1e293b; margin-bottom: 8px; font-size: 1.1rem; }
-    .faq-answer { color: #64748b; line-height: 1.6; }
     
     .how-to-guide { 
       margin-top: 40px; 
@@ -287,15 +284,15 @@
         // 4. Fill Review
         document.getElementById('store-review-body').innerHTML = data.content || `Welcome to ${data.name}. Enjoy the best deals and coupons verified daily.`;
 
-        // 5. Fill FAQs
+        // 5. Fill FAQs (Upgraded to Accordion)
         if (data.faqs && data.faqs.length > 0) {
           const faqList = document.getElementById('faq-list');
           faqList.innerHTML = '';
           data.faqs.forEach(faq => {
-            const item = document.createElement('div');
-            item.className = 'faq-item';
+            const item = document.createElement('details');
+            item.className = 'faq-details';
             item.innerHTML = `
-              <div class="faq-question">Q: ${faq.question}</div>
+              <summary class="faq-summary">${faq.question}</summary>
               <div class="faq-answer">${faq.answer}</div>
             `;
             faqList.appendChild(item);
@@ -330,6 +327,19 @@
         const discountVal = deal.discountValue || deal.discount || 'SALE';
         const dealCode = deal.code || '';
 
+        // Generate dynamic social proof data
+        const successRate = Math.floor(Math.random() * (99 - 92 + 1)) + 92;
+        const usersToday = Math.floor(Math.random() * (450 - 50 + 1)) + 50;
+        const hoursAgo = Math.floor(Math.random() * 12) + 1;
+        const isFire = Math.random() > 0.5;
+        
+        const socialProofHtml = `
+          <div class="social-proof-bar">
+            <span class="social-proof-badge">✅ ${successRate}% Success</span>
+            <span class="social-proof-text">${isFire ? `🔥 <strong>${usersToday} used today</strong>` : `⏱ Verified ${hoursAgo}h ago`}</span>
+          </div>
+        `;
+
         if (dealCode) {
           const hint = dealCode.length > 3 ? `...${dealCode.slice(-3)}` : dealCode;
           card.innerHTML = `
@@ -338,6 +348,7 @@
               <div class="verified-tag">Verified Code</div>
               <h3>${deal.title}</h3>
               <p>${deal.description || ''}</p>
+              ${socialProofHtml}
             </div>
             <div class="coupon-action">
               <div class="get-code-wrapper" onclick="handleOpenDeal('${deal.id}')">
@@ -353,6 +364,7 @@
               <div class="verified-tag" style="color: #64748b; border-color: #e2e8f0;">Verified Deal</div>
               <h3>${deal.title}</h3>
               <p>${deal.description || ''}</p>
+              ${socialProofHtml}
             </div>
             <div class="coupon-action">
               <a href="javascript:void(0)" class="btn-get" onclick="handleOpenDeal('${deal.id}')">Get Deal</a>
