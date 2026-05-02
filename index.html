@@ -122,10 +122,6 @@
     // Hàm khởi tạo lấy dữ liệu từ hệ thống Backend mới
     async function initSite() {
       try {
-        // LƯU Ý QUAN TRỌNG: 
-        // Hiện tại đang gọi đến localhost để bạn test trên máy.
-        // Khi đẩy Backend lên mạng thực tế (ví dụ: Render.com), 
-        // bạn cần SỬA LẠI ĐƯỜNG LINK NÀY thành link thật (vd: https://bobo-api.onrender.com/api/data)
         const response = await fetch('https://admin.boboreviews.com/api/data');
         const siteData = await response.json();
 
@@ -195,9 +191,10 @@
           dealsContainer.appendChild(card);
         });
 
-        // Populate Categories
+        // Populate Categories - Fixed: Filter out empty names
         const categoriesContainer = document.getElementById('categories-container');
         (siteData.categories || []).forEach(cat => {
+          if (!cat.name || cat.name.trim() === "") return;
           const btn = document.createElement('a');
           btn.href = cat.link;
           btn.className = 'category-btn';
