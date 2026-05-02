@@ -1,7 +1,8 @@
 {
   "cleanUrls": true,
-  "rewrites": [
-    { "source": "/store/:slug", "destination": "/store-page.html?slug=:slug" },
-    { "source": "/category/:slug", "destination": "/category.html?slug=:slug" }
+  "routes": [
+    { "src": "/store/(?<slug>[^/]+)", "dest": "/store-page.html?slug=$slug" },
+    { "src": "/category/(?<slug>[^/]+)", "dest": "/category.html?slug=$slug" },
+    { "src": "/(.*)", "dest": "/$1" }
   ]
 }
