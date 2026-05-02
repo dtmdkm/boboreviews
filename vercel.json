@@ -1,13 +1,8 @@
 {
-  "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/store/:slug*",
-      "destination": "/store-page.html?slug=:slug*"
-    },
-    {
-      "source": "/category/:slug*",
-      "destination": "/index.html?category=:slug*"
+      "source": "/store/(.*)",
+      "destination": "/store-page.html?slug=$1"
     }
   ]
 }
