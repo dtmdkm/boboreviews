@@ -134,7 +134,7 @@
         storesContainer.innerHTML = ''; // Clear Skeletons
         (siteData.popularStores || []).forEach(store => {
           const card = document.createElement('a');
-          card.href = `store.html?slug=${store.slug}`;
+          card.href = `/store/${store.slug}`;
           card.className = 'store-card';
           
           let imgSrc = store.image;
