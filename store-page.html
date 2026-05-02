@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="referrer" content="no-referrer">
   <title>Store Detail | Boboreviews</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body style="background-color: #f8fafc;">
 
@@ -126,9 +126,18 @@
 
   <script type="module">
     async function loadStore() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const slug = urlParams.get('slug');
+      // 1. Cố gắng lấy slug từ URL cũ (?slug=...)
+      let slug = new URLSearchParams(window.location.search).get('slug');
       
+      // 2. Nếu không có, lấy slug từ đường dẫn sạch (vd: /store/orbitrings)
+      if (!slug) {
+        const pathParts = window.location.pathname.split('/').filter(Boolean);
+        if (pathParts.length >= 2 && pathParts[0] === 'store') {
+          slug = pathParts[1]; // Lấy phần tử ngay sau chữ "store"
+        }
+      }
+
+      // 3. Nếu vẫn không có thì mới đẩy về trang chủ
       if (!slug) {
         window.location.href = '/';
         return;
@@ -137,6 +146,11 @@
       try {
         const response = await fetch(`https://admin.boboreviews.com/api/stores/slug/${slug}`);
         const store = await response.json();
+
+        if (store.error) {
+           console.error("Store not found");
+           return;
+        }
 
         // Update basic info
         document.title = `${store.name} | Boboreviews`;
