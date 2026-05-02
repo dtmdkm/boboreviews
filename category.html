@@ -80,7 +80,7 @@
       margin: 4px 0 0 0;
     }
     .view-btn {
-      background: var(--secondary);
+      background: #1a4d2e;
       color: white;
       padding: 8px 20px;
       border-radius: 10px;
@@ -89,7 +89,7 @@
       transition: 0.2s;
     }
     .store-item:hover .view-btn {
-      background: var(--primary);
+      background: #4f772d;
     }
     .empty-state {
       text-align: center;
@@ -119,17 +119,6 @@
       position: relative;
       overflow: hidden;
     }
-    .skeleton-item::after {
-      content: "";
-      position: absolute;
-      top: 0; right: 0; bottom: 0; left: 0;
-      background: linear-gradient(90deg, #eee 0%, #f5f5f5 50%, #eee 100%);
-      animation: shimmer 1.5s infinite;
-    }
-    @keyframes shimmer {
-      0% { transform: translateX(-100%); }
-      100% { transform: translateX(100%); }
-    }
   </style>
 </head>
 <body>
@@ -154,7 +143,6 @@
 
   <script type="module">
     async function fetchCategoryData() {
-      // Robust Slug Extraction
       const urlParams = new URLSearchParams(window.location.search);
       let slug = urlParams.get('slug');
       
@@ -178,8 +166,8 @@
 
         const category = data.categories.find(c => c.slug === slug);
         if (!category) {
-          titleEl.textContent = "Danh mục không tồn tại";
-          container.innerHTML = '<div class="empty-state"><h2>Oops!</h2><p>Chúng tôi không tìm thấy danh mục này.</p><a href="/" class="btn-deal" style="width: auto; display: inline-block; padding: 10px 30px;">Quay lại Trang chủ</a></div>';
+          titleEl.textContent = "Category Not Found";
+          container.innerHTML = '<div class="empty-state"><h2>Oops!</h2><p>We could not find this category.</p><a href="/" class="view-btn" style="width: auto; display: inline-block;">Back to Home</a></div>';
           return;
         }
 
@@ -187,7 +175,7 @@
         document.title = `${category.name} - Boboreviews`;
 
         const catId = category.id || category._id;
-        const matchedStores = data.popularStores.filter(s => {
+        const matchedStores = (data.popularStores || []).filter(s => {
           const sCatId = s.categoryId?.id || s.categoryId?._id || s.categoryId;
           return sCatId === catId;
         });
@@ -196,9 +184,9 @@
           container.innerHTML = `
             <div class="empty-state animate">
               <div class="icon">📭</div>
-              <h2>Chưa có cửa hàng nào!</h2>
-              <p>Hiện tại danh mục này chưa có cửa hàng nào được cập nhật. Vui lòng quay lại sau hoặc khám phá các danh mục khác nhé.</p>
-              <a href="/" class="btn-deal" style="width: auto; display: inline-block; padding: 10px 30px;">Khám phá thêm</a>
+              <h2>No stores found yet!</h2>
+              <p>This category currently has no stores assigned. Please check back later or explore other categories.</p>
+              <a href="/" class="view-btn" style="width: auto; display: inline-block;">Explore More</a>
             </div>
           `;
         } else {
@@ -209,20 +197,20 @@
             item.className = 'store-item animate';
             item.innerHTML = `
               <div class="store-info">
-                <img src="${store.image || '/placeholder-store.jpg'}" alt="${store.name}" class="store-logo-small" onerror="this.src='/placeholder-store.jpg'">
+                <img src="${store.image || '/favicon.png'}" alt="${store.name}" class="store-logo-small" onerror="this.src='/favicon.png'">
                 <div class="store-details">
                   <h3>${store.name}</h3>
                   <p>${store.rating || 5}.0 ⭐ | ${store.description || 'Verified Store'}</p>
                 </div>
               </div>
-              <div class="view-btn">Xem ưu đãi</div>
+              <div class="view-btn">View Deals</div>
             `;
             container.appendChild(item);
           });
         }
       } catch (error) {
         console.error("Error:", error);
-        container.innerHTML = '<div class="empty-state"><h2>Lỗi kết nối</h2><p>Không thể tải dữ liệu. Vui lòng thử lại sau.</p></div>';
+        container.innerHTML = '<div class="empty-state"><h2>Connection Error</h2><p>Failed to load data. Please try again later.</p></div>';
       }
     }
 
