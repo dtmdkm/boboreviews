@@ -4,476 +4,95 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="referrer" content="no-referrer">
-  <title>Boboreviews | Store Detail</title>
+  <title>Store | Boboreviews</title>
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="stylesheet" href="/style.css">
-  <style>
-    /* Inline fixes for structural integrity */
-    #loading { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; }
-    .store-layout { display: none; } /* Hidden by default, shown by JS */
-    
-    .faq-section { margin-top: 40px; }
-    
-    .how-to-guide { 
-      margin-top: 40px; 
-      background: #f8fafc; 
-      border: 1px solid #e2e8f0; 
-      border-radius: 12px; 
-      padding: 25px; 
-    }
-    .how-to-guide h2 { margin-bottom: 15px; font-size: 1.5rem; }
-    .guide-step { margin-bottom: 12px; line-height: 1.6; color: #334155; }
-    .guide-step b { color: #0f172a; }
-  </style>
 </head>
 <body>
 
-  <header>
-    <div class="container header-inner">
-      <a href="/" class="logo" style="display: flex; align-items: center;">
-        <img src="/favicon.png" alt="Boboreviews Logo" style="height: 32px; margin-right: 8px; border-radius: 4px;">
-        BOBO<span>REVIEWS</span>
-      </a>
-      <div class="search-bar">
-        <input type="text" placeholder="Search for stores, deals or tools...">
-      </div>
-      <nav>
-        <a href="/" style="font-weight: 600; color: #1a4d2e;">← Back to Home</a>
-      </nav>
+  <header style="background: white; border-bottom: 1px solid #e2e8f0; padding: 15px 0;">
+    <div class="container header-inner" style="justify-content: center;">
+      <a href="/" class="logo" style="color: #1e293b; font-size: 1.5rem;">BOBO<span>REVIEWS</span></a>
     </div>
   </header>
 
-  <main class="container">
-    <!-- New Professional Store Hero -->
-    <div id="store-hero" style="display: none; margin-top: 20px;">
-      <div id="store-banner-container" class="store-banner-wrap">
-        <img id="store-banner-img" src="" alt="Banner" class="store-banner-img">
-      </div>
-      
-      <div class="store-profile-header">
-        <div class="store-logo-wrap">
-          <img id="store-logo-main" src="" alt="Logo" onerror="this.src='/favicon.png'">
-        </div>
-        <div class="store-info-wrap">
-          <h1 class="store-title-main">
-            <span id="main-store-name"></span>
-            <span class="verified-badge">
-              <svg style="width:14px;height:14px;margin-right:4px;fill:currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-              Verified
-            </span>
-          </h1>
-          <div class="store-meta-main">
-            <div class="stars">★★★★★</div>
-            <span id="main-vote-count" class="vote-text"></span>
-          </div>
-        </div>
-        <div class="store-actions-main">
-           <button class="btn-follow" onclick="alert('Added to favorites!')">
-             <svg style="width:18px;height:18px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-             Follow Store
-           </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Loading State -->
-    <div id="loading">
-      <div class="skeleton-deal skeleton" style="width: 100%; height: 200px; margin-bottom: 20px;"></div>
-      <h2 style="color: #64748b;">Loading Store Details...</h2>
-    </div>
-
-    <div class="store-layout" id="store-content">
-      <!-- Sidebar -->
-      <aside>
-        <div class="sidebar-card" style="margin-top: 0;">
-          <h3 style="font-size: 1rem; margin-bottom: 15px; color: #1e293b; text-align: left;">Store Information</h3>
-          <p id="sidebar-desc" style="font-size: 0.85rem; color: #64748b; line-height: 1.5; text-align: left; margin-bottom: 20px;"></p>
-          <button class="btn-alert">Get Coupon Alert</button>
-        </div>
-        
-        <div class="stats-box">
-          <div class="stat-row">
-            <span id="coupon-count-label">0 Coupons Available</span>
-          </div>
-          <div class="stat-row">
-            <span>Coupon Codes</span>
-            <b id="codes-count">0</b>
-          </div>
-          <div class="stat-row">
-            <span>Deals</span>
-            <b id="deals-count">0</b>
-          </div>
-        </div>
-      </aside>
-
-      <!-- Main Content -->
-      <section>
-        <div class="promo-header">
-          <h1 id="promo-title"> Coupons and Promo Codes</h1>
-        </div>
-
-        <div class="filter-tabs" id="filter-tabs-container">
-          <!-- Populated by JS -->
-        </div>
-
-        <div id="coupons-list">
-          <!-- Coupons populated here -->
-        </div>
-
-        <div class="about-section">
-          <h2>About <span id="about-store-name">store</span></h2>
-          <div id="store-review-body" class="content-body">
-            <!-- Review content here -->
-          </div>
-          
-          <!-- How to apply section (DYNAMIC) -->
-          <div class="how-to-guide" id="how-to-apply">
-            <h2>How to apply <span class="dynamic-store-name">Store</span> coupon codes</h2>
-            <div class="guide-step">
-              <b>Step 1:</b> Find your <span class="dynamic-store-name">Store</span> Coupons, discount codes on this page or <b>Boboreviews</b> and click <b>"GET CODE"</b> button to view the code, then click "Copy" and the coupons, discount codes will be copied to your phone's or computer's clipboard.
-            </div>
-            <div class="guide-step">
-              <b>Step 2:</b> Go to <span class="dynamic-store-name">Store</span> then select all items you want to buy and add to shopping cart. When finished shopping, go to the <span class="dynamic-store-name">Store</span> checkout page.
-            </div>
-            <div class="guide-step">
-              <b>Step 3:</b> During checkout, find the text "Promo Code" or "Discount Code" and paste your <span class="dynamic-store-name">Store</span> coupons, discount codes in step 1 to this box. Click "Apply" and your savings for <span class="dynamic-store-name">Store</span> will be applied.
-            </div>
-          </div>
-
-          <!-- FAQ Section (DYNAMIC) -->
-          <div class="faq-section" id="faq-container" style="display: none;">
-            <h2>Frequently Asked Questions</h2>
-            <div id="faq-list"></div>
-          </div>
-        </div>
-      </section>
-    </div>
-  </main>
-
-  <!-- Coupon Modal -->
-  <div id="coupon-modal" class="modal-overlay">
-    <div class="modal-popup">
-      <div class="modal-header-bar"></div>
-      <span class="modal-close" onclick="closeModal()">&times;</span>
-      <div class="modal-body" id="modal-dynamic-content">
-        <!-- Content filled by JS -->
-      </div>
+  <div id="store-content" class="container" style="margin-top: 40px; min-height: 600px;">
+    <div class="loading-state" style="text-align: center; padding: 100px;">
+      <h2>Loading Store Details...</h2>
     </div>
   </div>
 
-  <footer>
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-col" id="footer-event-sales">
-          <h4>Event Sales</h4>
-          <ul id="event-sales-list"></ul>
-        </div>
-        <div class="footer-col" id="footer-resources">
-          <h4>Resources</h4>
-          <ul id="resources-list"></ul>
-        </div>
-        <div class="footer-col" id="footer-company">
-          <h4>Company</h4>
-          <ul id="company-list"></ul>
-        </div>
-        <div class="footer-col" id="footer-notices">
-          <h4>Notices</h4>
-          <ul id="notices-list"></ul>
-        </div>
-        <div class="footer-col">
-          <h4>Follow Us On</h4>
-          <div class="social-links">
-            <a href="#" aria-label="Facebook"><svg style="width: 20px; height: 20px; fill: white;" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
-            <a href="#" aria-label="Twitter"><svg style="width: 20px; height: 20px; fill: white;" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a>
-            <a href="#" aria-label="Instagram"><svg style="width: 20px; height: 20px; fill: white;" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
-            <a href="#" aria-label="Pinterest"><svg style="width: 20px; height: 20px; fill: white;" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-1.7 19.85c-.04-.33-.08-.83.02-1.2.08-.36.56-2.43.56-2.43s-.14-.28-.14-.7c0-.66.38-1.15.86-1.15.4 0 .6.3.6.66 0 .4-.25 1-.4 1.55-.12.48.24.87.72.87.87 0 1.54-.91 1.54-2.22 0-1.16-.83-1.97-2.02-1.97-1.38 0-2.2.1-2.2 2.12 0 .42.16.88.36 1.12a.15.15 0 0 1 .03.13c-.04.16-.13.52-.15.6-.02.08-.07.1-.16.06-1.57-1.57-1.12-3.16-1.12-3.16 0-2.43 1.77-4.66 5.1-4.66 2.68 0 4.76 1.91 4.76 4.46 0 2.66-1.68 4.81-4 4.81-.78 0-1.52-.4-1.77-.88 0 0-.39 1.48-.48 1.86-.18.68-.65 1.53-.97 2.05A10 10 0 1 0 12 2z"></path></svg></a>
-          </div>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 Boboreviews. Built with premium aesthetics.</p>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    let allDeals = [];
-    let currentStore = null;
-
-    async function loadStore() {
+  <script type="module">
+    async function fetchStoreDetails() {
+      // Robust Slug Extraction
       const urlParams = new URLSearchParams(window.location.search);
       let slug = urlParams.get('slug');
-      const offerId = urlParams.get('offer');
       
-      const urlTitle = urlParams.get('title');
-      const urlCode = urlParams.get('code');
-      const urlLink = urlParams.get('link');
-
-      // 1. Nếu không có slug trên thanh địa chỉ, tự động đọc từ đường dẫn (clean URL)
       if (!slug) {
-        const pathParts = window.location.pathname.split('/').filter(Boolean);
-        if (pathParts.length >= 2 && pathParts[0] === 'store') {
-          slug = pathParts[1];
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        if (pathParts.includes('store')) {
+          slug = pathParts[pathParts.indexOf('store') + 1];
+        } else {
+          slug = pathParts[pathParts.length - 1];
         }
       }
-      
-      if (offerId && urlTitle) {
-        showInstantModal(urlTitle, urlCode, urlLink);
-      }
-      
-      if (!slug) {
-        window.location.href = '/';
-        return;
-      }
+
+      if (!slug) return window.location.href = '/';
+
+      const container = document.getElementById('store-content');
 
       try {
-        const response = await fetch(`https://admin.boboreviews.com/api/stores/slug/${slug}`);
-        const data = await response.json();
+        const res = await fetch('https://admin.boboreviews.com/api/data');
+        const data = await res.json();
 
-        if (data.error) {
-          document.getElementById('loading').innerHTML = `<h2 style="color: #ef4444;">Store Not Found</h2><p>${data.error}</p>`;
+        const store = data.popularStores.find(s => s.slug === slug);
+        if (!store) {
+          container.innerHTML = '<div style="text-align: center; padding: 100px;"><h2>Store Not Found</h2><a href="/" class="btn-deal" style="width: auto; display: inline-block; padding: 10px 30px; margin-top: 20px;">Go Back Home</a></div>';
           return;
         }
 
-        currentStore = data;
-        allDeals = data.deals || [];
+        document.title = `${store.name} - Boboreviews`;
 
-        // 1. Fill Hero & Banner
-        if (data.banner) {
-          document.getElementById('store-banner-img').src = data.banner;
-          document.getElementById('main-store-name').textContent = data.name;
-          document.getElementById('store-hero').style.display = 'block';
-        }
-
-        // 2. Fill Profile Header
-        document.getElementById('store-logo-main').src = data.image || '/favicon.png';
-        document.getElementById('sidebar-desc').textContent = data.description || '';
-        document.getElementById('promo-title').textContent = `${data.name} Coupons & Promo Codes`;
-        
-        document.querySelectorAll('.dynamic-store-name').forEach(el => {
-          el.textContent = data.name;
-        });
-        
-        const voteText = `${data.rating?.toFixed(1) || '5.0'} / ${data.totalVotes?.toLocaleString() || '1,250'} votes`;
-        document.getElementById('main-vote-count').textContent = voteText;
-        document.getElementById('about-store-name').textContent = data.name;
-        
-        const alertBtn = document.querySelector('.btn-alert');
-        if (alertBtn) {
-          alertBtn.onclick = () => {
-            if (allDeals.length > 0) handleOpenDeal(allDeals[0].id);
-            else window.open(data.link || '#', '_blank');
-          };
-        }
-        
-        const codes = allDeals.filter(d => d.type === 'code');
-        const deals = allDeals.filter(d => d.type === 'deal');
-        
-        document.getElementById('codes-count').textContent = codes.length;
-        document.getElementById('deals-count').textContent = deals.length;
-        document.getElementById('coupon-count-label').textContent = `${allDeals.length} Coupons Available`;
-
-        // 3. Update Tabs
-        const tabsContainer = document.getElementById('filter-tabs-container');
-        tabsContainer.innerHTML = `
-          <div class="tab active" onclick="applyFilter('all')">All(${allDeals.length})</div>
-          <div class="tab" onclick="applyFilter('code')">Codes(${codes.length})</div>
-          <div class="tab" onclick="applyFilter('deal')">Deals(${deals.length})</div>
-        `;
-
-        // 4. Fill Review
-        document.getElementById('store-review-body').innerHTML = data.content || `Welcome to ${data.name}. Enjoy the best deals and coupons verified daily.`;
-
-        // 5. Fill FAQs (Upgraded to Accordion)
-        if (data.faqs && data.faqs.length > 0) {
-          const faqList = document.getElementById('faq-list');
-          faqList.innerHTML = '';
-          data.faqs.forEach(faq => {
-            const item = document.createElement('details');
-            item.className = 'faq-details';
-            item.innerHTML = `
-              <summary class="faq-summary">${faq.question}</summary>
-              <div class="faq-answer">${faq.answer}</div>
-            `;
-            faqList.appendChild(item);
-          });
-          document.getElementById('faq-container').style.display = 'block';
-        }
-
-        // 6. Render Deals
-        renderDeals(allDeals);
-
-        // 7. Show Content
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('store-content').style.display = 'grid';
-
-        if (offerId && !urlTitle) {
-          showDealModal(offerId);
-        }
-
-      } catch (error) {
-        console.error("Load Store Error:", error);
-      }
-    }
-
-    function renderDeals(dealsToRender) {
-      const list = document.getElementById('coupons-list');
-      if (!list) return;
-      list.innerHTML = '';
-      
-      dealsToRender.forEach(deal => {
-        const card = document.createElement('div');
-        card.className = 'coupon-card';
-        const discountVal = deal.discountValue || deal.discount || 'SALE';
-        const dealCode = deal.code || '';
-
-        // Generate dynamic social proof data
-        const successRate = Math.floor(Math.random() * (99 - 92 + 1)) + 92;
-        const usersToday = Math.floor(Math.random() * (450 - 50 + 1)) + 50;
-        const hoursAgo = Math.floor(Math.random() * 12) + 1;
-        const isFire = Math.random() > 0.5;
-        
-        const socialProofHtml = `
-          <div class="social-proof-bar">
-            <span class="social-proof-badge">✅ ${successRate}% Success</span>
-            <span class="social-proof-text">${isFire ? `🔥 <strong>${usersToday} used today</strong>` : `⏱ Verified ${hoursAgo}h ago`}</span>
-          </div>
-        `;
-
-        if (dealCode) {
-          const hint = dealCode.length > 3 ? `...${dealCode.slice(-3)}` : dealCode;
-          card.innerHTML = `
-            <div class="save-badge"><span class="amount">${discountVal}</span></div>
-            <div class="coupon-info">
-              <div class="verified-tag">Verified Code</div>
-              <h3>${deal.title}</h3>
-              <p>${deal.description || ''}</p>
-              ${socialProofHtml}
-            </div>
-            <div class="coupon-action">
-              <div class="get-code-wrapper" onclick="handleOpenDeal('${deal.id}')">
-                <span class="code-hint">${hint}</span>
-                <div class="btn-peel">Get Code</div>
+        container.innerHTML = `
+          <div class="store-header glass animate" style="padding: 40px; border-radius: 24px; display: flex; align-items: center; gap: 40px; margin-bottom: 40px; background: white;">
+            <img src="${store.image || '/placeholder-store.jpg'}" alt="${store.name}" style="width: 150px; height: 150px; border-radius: 20px; object-fit: contain; border: 1px solid #eee;">
+            <div>
+              <h1 style="font-size: 2.5rem; margin-bottom: 10px;">${store.name}</h1>
+              <p style="font-size: 1.1rem; color: #64748b;">${store.description || 'Verified Store and Top Deals'}</p>
+              <div style="margin-top: 20px; display: flex; gap: 15px;">
+                <span style="background: #f1f5f9; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem;">⭐ ${store.rating || 5}.0 Rating</span>
+                <span style="background: #f1f5f9; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem;">✅ Verified</span>
               </div>
             </div>
-          `;
-        } else {
-          card.innerHTML = `
-            <div class="save-badge"><span class="amount">${discountVal}</span></div>
-            <div class="coupon-info">
-              <div class="verified-tag" style="color: #64748b; border-color: #e2e8f0;">Verified Deal</div>
-              <h3>${deal.title}</h3>
-              <p>${deal.description || ''}</p>
-              ${socialProofHtml}
-            </div>
-            <div class="coupon-action">
-              <a href="javascript:void(0)" class="btn-get" onclick="handleOpenDeal('${deal.id}')">Get Deal</a>
-            </div>
-          `;
-        }
-        list.appendChild(card);
-      });
-    }
-
-    window.applyFilter = function(type) {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      event.target.classList.add('active');
-      if (type === 'all') renderDeals(allDeals);
-      else renderDeals(allDeals.filter(d => d.type === type));
-    };
-
-    window.handleOpenDeal = function(dealId) {
-      const deal = allDeals.find(d => d.id === dealId);
-      if (!deal) return;
-      const currentUrl = window.location.href.split('?')[0];
-      const couponParams = new URLSearchParams({
-        slug: currentStore.slug,
-        offer: dealId,
-        title: deal.title,
-        code: deal.code || '',
-        link: deal.link
-      });
-      window.open(`${currentUrl}?${couponParams.toString()}`, '_blank');
-      window.location.href = deal.link;
-      fetch(`https://admin.boboreviews.com/api/deals/${dealId}/click`, { method: 'POST' }).catch(() => {});
-    };
-
-    window.showInstantModal = function(title, code, link) {
-      const modalContent = document.getElementById('modal-dynamic-content');
-      const logo = '/favicon.png';
-      if (code && code !== 'null') {
-        modalContent.innerHTML = `
-          <img src="${logo}" alt="Logo" class="modal-store-logo">
-          <h3 class="modal-title">${title}</h3>
-          <p class="modal-instruction">Copy the code and use it at checkout</p>
-          <div class="code-box">
-            <div id="modal-code" class="code-text">${code}</div>
-            <button class="copy-btn" onclick="copyCode()">Copy Code</button>
           </div>
-          <a href="${link}" target="_blank" class="modal-footer-link">Visit Store →</a>
+
+          <div class="deals-grid">
+            <div style="grid-column: 1 / -1; margin-bottom: 20px;">
+              <h2>Active Coupons & Deals</h2>
+            </div>
+            ${(data.deals || []).filter(d => (d.storeId?._id || d.storeId?.id || d.storeId) === (store.id || store._id)).map(deal => `
+              <div class="deal-card animate" style="background: white;">
+                <div class="deal-content">
+                  <h3 class="deal-title">${deal.title}</h3>
+                  <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 15px;">${deal.description || 'Get this amazing deal now!'}</p>
+                  <div class="deal-prices">
+                    ${deal.price ? `<span class="price-old">${deal.price}</span>` : ''}
+                    <span class="price-new">${deal.discountPrice || 'FREE'}</span>
+                  </div>
+                  <a href="${deal.link}" class="btn-deal" target="_blank">Get Deal</a>
+                </div>
+              </div>
+            `).join('') || '<div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: white; border-radius: 20px;">No active deals for this store yet.</div>'}
+          </div>
         `;
-      } else {
-        modalContent.innerHTML = `
-          <img src="${logo}" alt="Logo" class="modal-store-logo">
-          <h3 class="modal-title">${title}</h3>
-          <p class="modal-instruction" style="margin-bottom: 25px;">No code needed. Click below to activate the deal.</p>
-          <a href="${link}" target="_blank" class="btn-get" style="display: block; width: 100%;">Activate Deal</a>
-          <a href="${link}" target="_blank" class="modal-footer-link">Go to Store →</a>
-        `;
-      }
-      document.getElementById('coupon-modal').style.display = 'flex';
-    };
 
-    window.showDealModal = function(dealId) {
-      const deal = allDeals.find(d => d.id === dealId);
-      if (!deal) return;
-      showInstantModal(deal.title, deal.code, deal.link);
-    };
-
-    window.closeModal = function() {
-      document.getElementById('coupon-modal').style.display = 'none';
-    };
-
-    window.copyCode = function() {
-      const code = document.getElementById('modal-code').textContent;
-      navigator.clipboard.writeText(code).then(() => {
-        const btn = document.querySelector('.copy-btn');
-        btn.textContent = 'COPIED!';
-        btn.style.background = '#166534';
-      });
-    };
-
-    // Populate Footer function (Common across all pages)
-    async function initFooter() {
-      try {
-        const response = await fetch('https://admin.boboreviews.com/api/data');
-        const siteData = await response.json();
-        
-        const populateList = (id, items) => {
-          if(!items) return;
-          const list = document.getElementById(id);
-          if (!list) return;
-          list.innerHTML = '';
-          items.forEach(item => {
-            const li = document.createElement('li');
-            li.innerHTML = `<a href="${item.link}">${item.name}</a>`;
-            list.appendChild(li);
-          });
-        };
-
-        populateList('event-sales-list', siteData.eventSales || []);
-        if (siteData.footer) {
-          populateList('resources-list', siteData.footer.resources || []);
-          populateList('company-list', siteData.footer.company || []);
-          populateList('notices-list', siteData.footer.notices || []);
-        }
-      } catch (err) {
-        console.error("Footer load error:", err);
+      } catch (error) {
+        console.error("Error:", error);
+        container.innerHTML = '<h2>Connection Error</h2>';
       }
     }
 
-    loadStore();
-    initFooter();
+    fetchStoreDetails();
   </script>
 </body>
 </html>

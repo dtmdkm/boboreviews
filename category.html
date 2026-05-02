@@ -154,18 +154,17 @@
 
   <script type="module">
     async function fetchCategoryData() {
-      // Extract slug from URL pathname (e.g. /category/ai -> ai)
-      const pathname = window.location.pathname;
-      const pathParts = pathname.split('/');
-      let slug = '';
-      if (pathParts.includes('category')) {
-        slug = pathParts[pathParts.indexOf('category') + 1];
-      }
+      // Robust Slug Extraction
+      const urlParams = new URLSearchParams(window.location.search);
+      let slug = urlParams.get('slug');
       
-      // Fallback to query param
       if (!slug) {
-        const params = new URLSearchParams(window.location.search);
-        slug = params.get('slug');
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        if (pathParts.includes('category')) {
+          slug = pathParts[pathParts.indexOf('category') + 1];
+        } else {
+          slug = pathParts[pathParts.length - 1];
+        }
       }
 
       if (!slug) return window.location.href = '/';
