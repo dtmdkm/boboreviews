@@ -362,10 +362,10 @@ header { background: #ffffff !important; border-bottom: 1px solid #edf2f7; paddi
 
 .about-section { margin-top: 50px; padding: 40px; background: white; border-radius: 16px; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
 .about-section h2 { font-size: 1.6rem; margin-bottom: 25px; border-bottom: 3px solid #22c55e; display: inline-block; padding-bottom: 5px; color: #1e293b; }
-.content-body { color: #334155; font-size: 1.05rem; line-height: 1.8; }
-.content-body p { margin-bottom: 1.5rem; }
-.content-body h3 { font-size: 1.3rem; margin-top: 2.5rem; margin-bottom: 1.25rem; color: #0f172a; font-weight: 700; }
-.content-body strong { color: #0f172a; font-weight: 700; }
+.content-body { color: #475569; font-size: 1rem; line-height: 1.8; }
+.content-body p { margin-bottom: 1.25rem; }
+.content-body h3 { font-size: 1.25rem; margin-top: 2rem; margin-bottom: 1rem; color: #1e293b; }
+.content-body strong { color: #1e293b; font-weight: 600; }
 .content-body ul, .content-body ol { margin-bottom: 1.5rem; padding-left: 1.5rem; }
 .content-body li { margin-bottom: 0.8rem; }
 
@@ -411,6 +411,58 @@ header { background: #ffffff !important; border-bottom: 1px solid #edf2f7; paddi
 .modal-footer-link { display: block; margin-top: 20px; color: #22c55e; font-weight: 600; text-decoration: none; }
 
 @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+/* Responsive Design for Mobile */
+@media (max-width: 768px) {
+  .header-inner { flex-direction: column; gap: 15px; }
+  .search-bar { margin: 10px 0; width: 100%; }
+  
+  .store-layout { grid-template-columns: 1fr; gap: 20px; }
+  .sidebar-card { position: static; margin-bottom: 20px; }
+
+  .store-banner-wrap { height: 200px; border-radius: 12px; }
+  .store-banner-img { object-position: left center; } /* Keep brand text on the left visible */
+
+  .store-profile-header {
+    flex-direction: column;
+    padding: 0 20px;
+    margin-top: -40px;
+    text-align: center;
+  }
+  .store-logo-wrap {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+  }
+  .store-info-wrap {
+    margin-left: 0;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .store-title-main {
+    font-size: 1.5rem;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .store-meta-main {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .coupon-card {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .save-badge {
+    border-right: none;
+    border-bottom: 1px dashed #f1f5f9;
+  }
+  .coupon-action {
+    border-left: none;
+    border-top: 1px dashed #e2e8f0;
+  }
+}
 
 /* Footer */
 footer { background: #004d00; color: white; padding: 4rem 0 2rem; margin-top: 5rem; }

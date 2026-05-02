@@ -5,8 +5,8 @@
       "destination": "/store.html?slug=:slug"
     },
     {
-      "source": "/blog/:slug",
-      "destination": "/blog.html?slug=:slug"
+      "source": "/category/:slug",
+      "destination": "/index.html?category=:slug"
     }
   ]
 }
