@@ -5,167 +5,220 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="referrer" content="no-referrer">
   <title>Category | Boboreviews</title>
-  <meta name="description" content="Browse stores by category on Boboreviews.">
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="stylesheet" href="style.css">
   <style>
-    .category-header {
-      background: var(--glass);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--glass-border);
-      padding: 40px 0;
-      margin-bottom: 40px;
-      border-radius: 24px;
-      text-align: center;
+    :root {
+      --card-bg: #ffffff;
+      --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      --text-main: #1e293b;
     }
-    .category-header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-      background: var(--gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    body {
+      background-color: #f8fafc;
+      color: var(--text-main);
     }
-    .stores-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 24px;
+    .category-container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
     }
-    .store-card {
-      background: var(--glass);
-      border: 1px solid var(--glass-border);
-      border-radius: 20px;
-      padding: 24px;
-      text-align: center;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    .category-title-wrap {
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    .category-title-wrap h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+    .store-list {
       display: flex;
       flex-direction: column;
+      gap: 16px;
+    }
+    .store-item {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 16px 24px;
+      display: flex;
       align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--card-shadow);
+      transition: all 0.3s ease;
       text-decoration: none;
       color: inherit;
+      border: 1px solid transparent;
     }
-    .store-card:hover {
-      transform: translateY(-8px);
+    .store-item:hover {
+      transform: translateX(8px);
       border-color: var(--secondary);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
     }
-    .store-logo {
-      width: 80px;
-      height: 80px;
-      border-radius: 16px;
-      object-fit: cover;
-      margin-bottom: 16px;
-      background: white;
-      padding: 5px;
+    .store-info {
+      display: flex;
+      align-items: center;
+      gap: 20px;
     }
-    .store-name {
+    .store-logo-small {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      object-fit: contain;
+      background: #f1f5f9;
+      padding: 4px;
+      border: 1px solid #e2e8f0;
+    }
+    .store-details h3 {
+      font-size: 1.2rem;
       font-weight: 700;
-      font-size: 1.1rem;
+      margin: 0;
+    }
+    .store-details p {
+      font-size: 0.9rem;
+      color: #64748b;
+      margin: 4px 0 0 0;
+    }
+    .view-btn {
+      background: var(--secondary);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: 0.2s;
+    }
+    .store-item:hover .view-btn {
+      background: var(--primary);
+    }
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+      background: white;
+      border-radius: 24px;
+      box-shadow: var(--card-shadow);
+    }
+    .empty-state .icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+    }
+    .empty-state h2 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: #334155;
+    }
+    .empty-state p {
+      color: #64748b;
+      max-width: 400px;
+      margin: 0 auto 24px auto;
+    }
+
+    /* Skeleton Loading */
+    .skeleton-item {
+      height: 92px;
+      background: #eee;
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .skeleton-item::after {
+      content: "";
+      position: absolute;
+      top: 0; right: 0; bottom: 0; left: 0;
+      background: linear-gradient(90deg, #eee 0%, #f5f5f5 50%, #eee 100%);
+      animation: shimmer 1.5s infinite;
+    }
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="container header-inner">
-      <a href="/" class="logo" style="display: flex; align-items: center;">
-        <img src="favicon.png" alt="Logo" style="height: 32px; margin-right: 8px; border-radius: 4px;">
-        BOBO<span>REVIEWS</span>
-      </a>
-      <div class="search-bar">
-        <input type="text" placeholder="Search stores...">
-      </div>
+  <header style="background: white; border-bottom: 1px solid #e2e8f0; padding: 15px 0;">
+    <div class="container header-inner" style="justify-content: center;">
+      <a href="/" class="logo" style="color: #1e293b; font-size: 1.5rem;">BOBO<span>REVIEWS</span></a>
     </div>
   </header>
 
-  <main class="container">
-    <div class="category-header animate">
-      <h1 id="category-title">Loading Category...</h1>
-      <p id="category-count" style="color: var(--text-muted);"></p>
+  <div class="category-container">
+    <div class="category-title-wrap animate">
+      <h1 id="category-display-name">Loading...</h1>
     </div>
 
-    <div class="stores-grid" id="stores-container">
-      <!-- Skeletons -->
-      <div class="skeleton-store skeleton" style="height: 200px; border-radius: 20px;"></div>
-      <div class="skeleton-store skeleton" style="height: 200px; border-radius: 20px;"></div>
-      <div class="skeleton-store skeleton" style="height: 200px; border-radius: 20px;"></div>
-      <div class="skeleton-store skeleton" style="height: 200px; border-radius: 20px;"></div>
+    <div id="stores-list-container" class="store-list">
+      <div class="skeleton-item"></div>
+      <div class="skeleton-item"></div>
+      <div class="skeleton-item"></div>
     </div>
-  </main>
-
-  <footer>
-    <div class="container">
-      <div class="footer-bottom">
-        <p>&copy; 2026 Boboreviews. All rights reserved.</p>
-      </div>
-    </div>
-  </footer>
+  </div>
 
   <script type="module">
-    async function initCategory() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const slug = urlParams.get('slug');
-      
-      if (!slug) {
-        window.location.href = '/';
-        return;
-      }
+    async function fetchCategoryData() {
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get('slug');
+      if (!slug) return window.location.href = '/';
+
+      const container = document.getElementById('stores-list-container');
+      const titleEl = document.getElementById('category-display-name');
 
       try {
-        const response = await fetch('https://admin.boboreviews.com/api/data');
-        const data = await response.json();
+        const res = await fetch('https://admin.boboreviews.com/api/data');
+        const data = await res.json();
 
         const category = data.categories.find(c => c.slug === slug);
-        const storesContainer = document.getElementById('stores-container');
-        storesContainer.innerHTML = '';
-
         if (!category) {
-          document.getElementById('category-title').textContent = "Category Not Found";
+          titleEl.textContent = "Danh mục không tồn tại";
+          container.innerHTML = '<div class="empty-state"><h2>Oops!</h2><p>Chúng tôi không tìm thấy danh mục này.</p><a href="/" class="btn-deal" style="width: auto; display: inline-block; padding: 10px 30px;">Quay lại Trang chủ</a></div>';
           return;
         }
 
-        document.getElementById('category-title').textContent = category.name;
-        document.title = `${category.name} Coupons & Deals | Boboreviews`;
+        titleEl.textContent = category.name;
+        document.title = `${category.name} - Boboreviews`;
 
-        const categoryId = category.id || category._id;
-        const filteredStores = data.popularStores.filter(s => s.categoryId === categoryId);
+        const catId = category.id || category._id;
+        const matchedStores = data.popularStores.filter(s => {
+          const sCatId = s.categoryId?.id || s.categoryId?._id || s.categoryId;
+          return sCatId === catId;
+        });
 
-        document.getElementById('category-count').textContent = `${filteredStores.length} stores available`;
-
-        if (filteredStores.length === 0) {
-          storesContainer.innerHTML = `
-            <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; background: var(--glass); border-radius: 24px; border: 1px dashed var(--glass-border);">
-              <div style="font-size: 48px; margin-bottom: 20px;">📭</div>
-              <h3 style="margin-bottom: 10px;">Chưa có cửa hàng nào!</h3>
-              <p style="color: var(--text-muted);">Hiện tại chưa có cửa hàng nào được gán vào danh mục này. Vui lòng quay lại sau.</p>
-              <a href="/" class="btn-deal" style="display: inline-block; margin-top: 20px; width: auto; padding: 12px 30px;">Quay lại Trang chủ</a>
+        if (matchedStores.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state animate">
+              <div class="icon">📭</div>
+              <h2>Chưa có cửa hàng nào!</h2>
+              <p>Hiện tại danh mục này chưa có cửa hàng nào được cập nhật. Vui lòng quay lại sau hoặc khám phá các danh mục khác nhé.</p>
+              <a href="/" class="btn-deal" style="width: auto; display: inline-block; padding: 10px 30px;">Khám phá thêm</a>
             </div>
           `;
         } else {
-          filteredStores.forEach(store => {
-            const card = document.createElement('a');
-            card.href = `/store/${store.slug}`;
-            card.className = 'store-card animate';
-            
-            let imgSrc = store.image;
-            if (!imgSrc) {
-              const initial = (store.name || 'S').substring(0, 2).toUpperCase();
-              imgSrc = `https://placehold.co/200x200/f8fafc/1e293b?text=${initial}`;
-            }
-
-            card.innerHTML = `
-              <img src="${imgSrc}" alt="${store.name}" class="store-logo" onerror="this.src='https://placehold.co/200x200/f8fafc/1e293b?text=N/A'">
-              <span class="store-name">${store.name}</span>
-              <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">${store.rating || 5}.0 ⭐ Rating</p>
+          container.innerHTML = '';
+          matchedStores.forEach(store => {
+            const item = document.createElement('a');
+            item.href = `/store/${store.slug}`;
+            item.className = 'store-item animate';
+            item.innerHTML = `
+              <div class="store-info">
+                <img src="${store.image || '/placeholder-store.jpg'}" alt="${store.name}" class="store-logo-small" onerror="this.src='/placeholder-store.jpg'">
+                <div class="store-details">
+                  <h3>${store.name}</h3>
+                  <p>${store.rating || 5}.0 ⭐ | ${store.description || 'Verified Store'}</p>
+                </div>
+              </div>
+              <div class="view-btn">Xem ưu đãi</div>
             `;
-            storesContainer.appendChild(card);
+            container.appendChild(item);
           });
         }
       } catch (error) {
-        console.error("Error loading category data:", error);
+        console.error("Error:", error);
+        container.innerHTML = '<div class="empty-state"><h2>Lỗi kết nối</h2><p>Không thể tải dữ liệu. Vui lòng thử lại sau.</p></div>';
       }
     }
 
-    initCategory();
+    fetchCategoryData();
   </script>
+
 </body>
 </html>
