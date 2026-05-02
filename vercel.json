@@ -1,8 +1,31 @@
 {
+  "redirects": [
+    {
+      "source": "/store.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "(?<slug>.*)"
+        }
+      ],
+      "destination": "/store/:slug",
+      "permanent": true
+    },
+    {
+      "source": "/Store/(.*)",
+      "destination": "/store/$1",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/store/(.*)",
       "destination": "/store-page.html?slug=$1"
+    },
+    {
+      "source": "/category/(.*)",
+      "destination": "/index.html?category=$1"
     }
   ]
 }
