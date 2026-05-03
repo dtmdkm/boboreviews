@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="referrer" content="no-referrer">
   <title>Boboreviews | Store Detail</title>
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="stylesheet" href="/style.css">
   <link rel="preconnect" href="https://admin.boboreviews.com">
   <link rel="dns-prefetch" href="https://admin.boboreviews.com">
   <style>
@@ -36,7 +36,7 @@
   <header>
     <div class="container header-inner">
       <a href="/" class="logo" style="display: flex; align-items: center;">
-        <img src="favicon.png" alt="Boboreviews Logo" style="height: 32px; margin-right: 8px; border-radius: 4px;">
+        <img src="/favicon.png" alt="Boboreviews Logo" style="height: 32px; margin-right: 8px; border-radius: 4px;">
         BOBO<span>REVIEWS</span>
       </a>
       <div class="search-bar">
@@ -57,7 +57,7 @@
       
       <div class="store-profile-header">
         <div class="store-logo-wrap">
-          <img id="store-logo-main" src="" alt="Logo" onerror="this.src='favicon.png'">
+          <img id="store-logo-main" src="" alt="Logo" onerror="this.src='/favicon.png'">
         </div>
         <div class="store-info-wrap">
           <h1 class="store-title-main">
@@ -254,7 +254,7 @@
         }
 
         // 2. Fill Profile Header
-        document.getElementById('store-logo-main').src = data.image || 'favicon.png';
+        document.getElementById('store-logo-main').src = data.image || '/favicon.png';
         document.getElementById('sidebar-desc').textContent = data.description || '';
         document.getElementById('promo-title').textContent = `${data.name} Coupons & Promo Codes`;
         
@@ -393,7 +393,7 @@
 
     window.showInstantModal = function(title, code, link) {
       const modalContent = document.getElementById('modal-dynamic-content');
-      const logo = 'favicon.png';
+      const logo = '/favicon.png';
       if (code && code !== 'null') {
         modalContent.innerHTML = `
           <img src="${logo}" alt="Logo" class="modal-store-logo">
