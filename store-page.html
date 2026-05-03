@@ -207,7 +207,17 @@
 
     async function loadStore() {
       const urlParams = new URLSearchParams(window.location.search);
-      const slug = urlParams.get('slug');
+      let slug = urlParams.get('slug');
+      
+      if (!slug) {
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        if (pathParts.includes('store')) {
+          slug = pathParts[pathParts.indexOf('store') + 1];
+        } else {
+          slug = pathParts[pathParts.length - 1];
+        }
+      }
+      
       const offerId = urlParams.get('offer');
       
       const urlTitle = urlParams.get('title');
